@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+    keycloak:
+        image: quay.io/keycloak/keycloak:13.0.1
+        environment:
+            KEYCLOAK_USER: admin
+            KEYCLOAK_PASSWORD: admin
+            KEYCLOAK_IMPORT: /tmp/keycloak/keycloak_realm_export.json
+        volumes:
+            - ./keycloak:/tmp/keycloak
+        ports: 
+            - "8080:8080"
+    postgres:
+        image: postgres:13-alpine
+        environment:
+            POSTGRES_DB: migration_test
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: "password123"
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+            - "5432:5432"
+    turn:
+        image: coturn/coturn:latest
+        network_mode: "host"
+        command: 
+            - --use-auth-secret
+            - --static-auth-secre=k3k
+            - --realm=heinlein-video.de
+    janus:
+        image: quay.io/freswa/janus-gateway:0.11.1
+        network_mode: "host"
+        volumes:
+            - ./janus/janus.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg
+    rabbit:
+        image: rabbitmq:3-management
+        ports:
+            - "8180:15672"
+            - "5672:5672"
+
+          
