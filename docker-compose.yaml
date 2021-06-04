@@ -34,7 +34,7 @@ services:
             - -d 5
         network_mode: "host"
         depends_on:
-            - "rabbit"
+            - rabbit
         volumes:
             - ./janus/janus.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg
     rabbit:
@@ -42,5 +42,10 @@ services:
         ports:
             - "8280:15672"
             - "5672:5672"
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8280"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
 
           

@@ -7,9 +7,21 @@
 	"item": [
 		{
 			"name": "Turn",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:8000/v1/turn",
 					"host": [
@@ -54,7 +66,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id_token\": \"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxYTB5ZHZ3V0FnR2VTS1pURTlHU1VZS1BOSTgzd3hvRlZrdHpRQzJTNUZzIn0.eyJleHAiOjE2MjI2Mzk3OTQsImlhdCI6MTYyMjYzOTQ5NCwiYXV0aF90aW1lIjoxNjIyNjM5NDkzLCJqdGkiOiI2OGE0ZmQ0MS01ZTY2LTQzNmMtYTI5Zi04NGQ5MWMzN2Y3YjciLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvSzNLIiwiYXVkIjoiRnJvbnRlbmQiLCJzdWIiOiI1ZGU4NTQ0ZS1lOTdjLTQxMzgtOGIwNi1iY2IxMWI3MjYwNWQiLCJ0eXAiOiJJRCIsImF6cCI6IkZyb250ZW5kIiwic2Vzc2lvbl9zdGF0ZSI6ImE2ZDVhOWFlLTY5ZTYtNDdkNy05ZTdjLTVjOTQyN2NiZTMzYiIsImF0X2hhc2giOiJpMHJqUFdrQ1NVWi1ieUJ1cnNoWDhRIiwiYWNyIjoiMSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoidGVzdCBUZXN0IiwieF9ncnAiOltdLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0IiwiZ2l2ZW5fbmFtZSI6InRlc3QiLCJmYW1pbHlfbmFtZSI6IlRlc3QiLCJlbWFpbCI6InRlc3RAaW52YWxpZC50bC5kIn0.RzC1Y-G6ygBHoh-Tk4reb4tlzK6sUdX7etLCXrpmzf6ksvj_XaJl8gYfIX74Fj_VieQjzGaOSZjy6m5e0vaoSZfQYW0aBO78SLsH4wIzfpl0F2DY9XVNMKJVu2d78sltWFPixXrvJFR8QtTzKs6BnLRd7gri8rroKbTnxB5W4SxKhMmpWUQcLc02TqXb6FF2Uxd7JNOb4vHunISOPfJKzehqxR2KykLUq-bqRLiHomNb-6fTCm8BulJDqn2L2VS2GMAg5RBSo4LqQ2CwHebEwUMIS0YjGF3PS7yUKe4oHDa4JuVi2wDRhlJ5X84roSq43wUKqxFCHYNwlrkybW08OQ\"\n}",
+					"raw": "{\n    \"id_token\": \"{{id_token}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -71,6 +83,30 @@
 						"v1",
 						"auth",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/realms/K3K/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"K3K",
+						"protocol",
+						"openid-connect",
+						"token"
 					]
 				}
 			},
