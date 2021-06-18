@@ -8,9 +8,10 @@ services:
             KEYCLOAK_PASSWORD: admin
             KEYCLOAK_IMPORT: /tmp/keycloak/keycloak_realm_export.json
         volumes:
-            - ./keycloak:/tmp/keycloak
+            - ./keycloak:/tmp/keycloak:Z
         ports: 
             - "8080:8080"
+            - "8443:8443"
     postgres:
         image: postgres:13-alpine
         environment:
@@ -36,7 +37,7 @@ services:
         depends_on:
             - rabbit
         volumes:
-            - ./janus/janus.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg
+            - ./janus/janus.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg:Z
     rabbit:
         image: rabbitmq:3-management
         ports:
@@ -47,5 +48,11 @@ services:
             interval: 30s
             timeout: 10s
             retries: 5
+    redis:
+        image: redis:6.2
+        command:
+            - /usr/local/etc/redis/redis.conf
+        network_mode: "host"
+        volumes:
+            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
 
-          
