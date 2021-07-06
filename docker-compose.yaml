@@ -23,24 +23,38 @@ services:
         ports:
             - 5432:5432
     turn:
-        image: coturn/coturn:latest
-        network_mode: host
+        image: coturn/coturn:alpine
         command:
             - --use-auth-secret
             - --static-auth-secret=k3k
             - --realm=heinlein-video.de
-    janus:
+        network_mode: host
+    janus-1:
         image: quay.io/freswa/janus-gateway:0.11.1
         command:
             - janus
             - -d 5
-        network_mode: host
         depends_on:
             - rabbit
         volumes:
-            - ./janus/janus.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg:Z
+            - ./janus/janus-1.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg:Z
+            - ./janus/janus.transport.http.jcfg:/etc/janus/janus.transport.http.jcfg:Z
+            - ./janus/janus.transport.websockets.jcfg:/etc/janus/janus.transport.websockets.jcfg:Z
+        network_mode: host
+    janus-2:
+        image: quay.io/freswa/janus-gateway:0.11.1
+        command:
+            - janus
+            - -d 5
+        depends_on:
+            - rabbit
+        volumes:
+            - ./janus/janus-2.transport.rabbitmq.jcfg:/etc/janus/janus.transport.rabbitmq.jcfg:Z
+            - ./janus/janus.transport.http.jcfg:/etc/janus/janus.transport.http.jcfg:Z
+            - ./janus/janus.transport.websockets.jcfg:/etc/janus/janus.transport.websockets.jcfg:Z
+        network_mode: host
     rabbit:
-        image: rabbitmq:3-management
+        image: rabbitmq:3-management-alpine
         ports:
             - 8280:15672
             - 5672:5672
@@ -50,9 +64,14 @@ services:
             timeout: 10s
             retries: 5
     redis:
-        image: redis:6.2
+        image: redis:alpine
         command:
             - /usr/local/etc/redis/redis.conf
-        network_mode: host
         volumes:
             - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
+        ports:
+            - 6379:6379
+
+#  echo "nameserver 192.168.100.1" >> /etc/resolv.conf
+#  pacman -S net-tools
+#  netstat -ntlpu
