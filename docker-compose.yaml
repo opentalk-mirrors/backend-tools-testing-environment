@@ -54,7 +54,9 @@ services:
             - ./janus/janus.transport.websockets.jcfg:/etc/janus/janus.transport.websockets.jcfg:Z
         network_mode: host
     rabbit:
-        image: rabbitmq:3-management-alpine
+        image: rabbitmq:3.8-management-alpine
+        environment:
+            RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit consumer_timeout 1000
         ports:
             - 8280:15672
             - 5672:5672
