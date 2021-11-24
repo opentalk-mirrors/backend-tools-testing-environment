@@ -20,6 +20,17 @@ Admin Password: admin
 
 You need to create a new user **with** filled out Firstname, Lastname, and E-Mail
 
+# Metrics
+
+To also start the metrics stuff run:
+docker-compose -f docker-compose.yaml -f docker-compose.metrics.yaml up -d
+
+This starts
+Prometheus and Grafana and node-exporter
+## Grafana
+HTTP Port: 9000
+User/Password: admin:admin
+
 # Postman
 
 1. Import the collection into Postman.
