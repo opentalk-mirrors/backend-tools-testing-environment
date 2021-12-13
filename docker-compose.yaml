@@ -1,24 +1,8 @@
 ---
 version: "3.9"
 networks:
-    rabbitmq-prometheus:
-
-        null
+    rabbitmq-prometheus: null
 services:
-    keycloak:
-        image: jboss/keycloak
-        environment:
-            DB_VENDOR: h2
-            KEYCLOAK_USER: admin
-            KEYCLOAK_PASSWORD: admin
-            KEYCLOAK_IMPORT: /tmp/keycloak/keycloak_realm_export.json
-            KEYCLOAK_HOSTNAME: p01nc.heinlein-video.de
-        volumes:
-            - ./keycloak:/tmp/keycloak:Z
-            - "./keycloak_certs/:/etc/x509/https"
-        ports:
-            - "8080:8080"
-            - "8443:8443"
     postgres:
         image: postgres:13-alpine
         environment:
@@ -59,6 +43,14 @@ services:
             retries: 5
         networks:
             - "rabbitmq-prometheus"
+    redis:
+        image: redis:alpine
+        command:
+            - /usr/local/etc/redis/redis.conf
+        volumes:
+            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
+        ports:
+            - "6379:6379"
 
     ndt:
         image: measurementlab/ndt-server:latest

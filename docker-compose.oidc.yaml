@@ -1,0 +1,17 @@
+---
+version: "3.9"
+services:
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/keycloak/keycloak_realm_export.json
+      KEYCLOAK_HOSTNAME: p01nc.heinlein-video.de
+    volumes:
+      - ./keycloak:/tmp/keycloak:Z
+      - "./keycloak_certs/:/etc/x509/https"
+    ports:
+      - "8080:8080"
+      - "8443:8443"
