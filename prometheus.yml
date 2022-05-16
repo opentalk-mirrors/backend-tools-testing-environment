@@ -23,16 +23,19 @@ rule_files:
 
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "prometheus"
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ["localhost:9090"]
-  - job_name: "node-exporter"
+      - targets: ['localhost:9090']
+  - job_name: 'node-exporter'
     static_configs:
-      - targets: ["node-exporter:9100"]
-  - job_name: "rabbitmq-server"
+      - targets: ['node-exporter:9100']
+  - job_name: 'rabbitmq-server'
     static_configs:
       - targets:
-          - "rabbit:15692"
+          - 'rabbit:15692'
+  - job_name: redis_exporter
+    static_configs:
+      - targets: ['redis-exporter:9121']
   # - job_name: 'rabbitmq-exporter'
   #   scrape_interval: 60s
   #   scrape_timeout: 59s
