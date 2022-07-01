@@ -2,15 +2,15 @@
 version: "3.3"
 services:
   etherpad:
-    image: k3k-etherpad:latest
+    image: git.heinlein-video.de:5050/m.ankert/k3k-etherpad:latest
     volumes:
       - type: bind
-        source: ./APIKEY.txt
+        source: ./etherpad/APIKEY.txt
         target: /opt/etherpad-lite/APIKEY.txt
     environment:
-      - EDIT_ONLY=true
+      # Set TRUST_PROXY if the etherpad is behind a reverse proxy
+      # - TRUST_PROXY=true
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=admin
-      - SOFFICE=/usr/bin/soffice
     ports:
       - "9001:9001"
