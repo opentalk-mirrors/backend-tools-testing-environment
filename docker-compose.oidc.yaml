@@ -1,27 +1,27 @@
 ---
 version: "3.3"
+networks:
+  postgres: null
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak
+    image: quay.io/keycloak/keycloak:19.0
     restart: always
     command:
-      - start
-      - --auto-build
+      - start-dev
+      - --import-realm
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
       KC_DB_USERNAME: postgres
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KEYCLOAK_IMPORT: /tmp/keycloak/keycloak_realm_export.json
-      KC_HOSTNAME: ${HOSTNAME}:8443
-      KC_HTTPS_CERTIFICATE_FILE: /etc/x509/https/tls.crt
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /etc/x509/https/tls.key
+      # KC_HOSTNAME: keycloak
       KC_HTTP_RELATIVE_PATH: /auth
     volumes:
-      - ./keycloak_data:/opt/jboss/keycloak/standalone/data/:Z
-      - ./keycloak:/tmp/keycloak:Z
-      - "./keycloak_certs/:/etc/x509/https"
+      - ./keycloak:/opt/keycloak/data/import:Z
     ports:
       - "8080:8080"
-      - "8443:8443"
+    networks:
+      - postgres
+    depends_on:
+      - postgres

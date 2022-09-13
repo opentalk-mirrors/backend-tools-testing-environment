@@ -1,0 +1,26 @@
+---
+# Starts NDT Server on port 10081, make sure to set the protocol in the client config to "ws"
+version: "3.3"
+services:
+  ndt:
+    image: measurementlab/ndt-server:latest
+    volumes:
+      # - ./ndt/certs:/certs
+      #- ./ndt/html:/html
+      - ./ndt/datadir:/datadir
+    cap_drop:
+      - ALL
+    ports:
+      # - 10443:4443
+      - 10081:8080
+    command:
+      # - "-cert"
+      # - "/certs/cert.pem"
+      # - "-key"
+      # - "/certs/key.pem"
+      - "-datadir"
+      - "/datadir"
+      # - "-ndt7_addr"
+      # - ":4443"
+      - "-ndt7_addr_cleartext"
+      - ":8080"

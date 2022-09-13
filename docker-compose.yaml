@@ -1,12 +1,14 @@
 ---
 version: "3.3"
 networks:
-    rabbitmq-prometheus: null
+    rabbitmq: null
+    redis: null
+    postgres: null
 services:
     postgres:
         image: postgres:13-alpine
         environment:
-            POSTGRES_DB: ${DATABASE}
+            POSTGRES_DB: k3k
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: "password123"
             POSTGRES_HOST_AUTH_METHOD: trust
@@ -14,10 +16,13 @@ services:
             - "5432:5432"
         volumes:
             - ./pg_data:/var/lib/postgresql/data
+            - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
         command:
             - "postgres"
             - "-c"
             - "shared_preload_libraries=pg_stat_statements"
+        networks:
+            - "postgres"
     turn:
         image: coturn/coturn:latest
         network_mode: "host"
@@ -26,29 +31,35 @@ services:
             - --static-auth-secret=k3k
             - --realm=heinlein-video.de
     janus:
-        image: quay.io/freswa/janus-gateway-rmq:latest
+        image: git.heinlein-video.de:5050/heinlein-video/ot-janus-gateway:0.12.4-1
         command:
             - janus
-            - -d 5
-        environment:
-            JANUS_EXCHANGE_TYPE: topic
         network_mode: "host"
+        environment:
+            - WAITTIMEOUT=30
+            - RABBITMQ_HOST=localhost
+            - JANUS_EXCHANGE=janus-exchange
+            - JANUS_EXCHANGE_TYPE=topic
+            - JANUS_QUEUE_INCOMING=to-janus
+            - JANUS_ROUTING_KEY_OUTGOING=from-janus
+            - JANUS_ICE_IF=ens192
+            - JANUS_EVENT_LOOPS=92
+            - JANUS_ICE_LITE=true
+            #            - JANUS_DISABLE_WEBSOCKET=true
+            - JANUS_UDP_PORT_RANGE=20000:25000
+            - JANUS_IGNORE_MDS=true # remove if not wanted
+            - JANUS_HTTP_ADMIN=true
         depends_on:
-            - rabbit
-    rabbit:
+            - rabbitmq
+    rabbitmq:
         image: rabbitmq:3-management
         environment:
             RABBITMQ_SERVER_ADITIONAL_ERL_ARGS: "-rabbit log.console.level=debug"
         ports:
             - "8280:15672"
             - "5672:5672"
-        healthcheck:
-            test: [ "CMD", "rabbitmqctl", "node_health_check" ]
-            interval: 30s
-            timeout: 10s
-            retries: 5
         networks:
-            - "rabbitmq-prometheus"
+            - rabbitmq
     redis:
         image: redis:alpine
         command:
@@ -57,27 +68,5 @@ services:
             - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
         ports:
             - "6379:6379"
-
-    ndt:
-        image: measurementlab/ndt-server:latest
-        volumes:
-            - ./ndt/certs:/certs #- ./ndt/html:/html
-            - ./ndt/datadir:/datadir
-        cap_drop:
-            - ALL
-        ports:
-            - 10443:4443
-            - 10081:8080
-        command:
-            [
-                "-cert",
-                "/certs/cert.pem",
-                "-key",
-                "/certs/key.pem",
-                "-datadir",
-                "/datadir",
-                "-ndt7_addr",
-                ":4443",
-                "-ndt7_addr_cleartext",
-                ":8080"
-            ]
+        networks:
+            - redis

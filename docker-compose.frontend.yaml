@@ -1,0 +1,15 @@
+---
+version: "3.3"
+networks:
+  rabbitmq-prometheus: null
+services:
+  frontend:
+    image: git.heinlein-video.de:5050/heinlein-video/k3k-web-frontend:latest
+
+    ports:
+      - 3000:80
+    environment:
+      - CONTROLLER_HOST=localhost:8000
+      - BASE_URL=http://localhost:3000
+      - OIDC_ISSUER=http://localhost:8080/auth/realms/K3K
+      - INSECURE=true

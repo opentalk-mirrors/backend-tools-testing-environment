@@ -1,6 +1,5 @@
 ---
 version: "3.3"
-
 services:
   jaeger:
     image: quay.io/jaegertracing/all-in-one:1
@@ -13,5 +12,3 @@ services:
       - "14268:14268"
       - "14250:14250"
       - "9411:9411"
-    environment:
-      JANUS_EXCHANGE_TYPE: :9411

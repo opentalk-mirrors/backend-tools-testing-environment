@@ -5,10 +5,18 @@ Ready to run testing environments for k3k-signaling and k3k-controller
 Just a simple `sudo docker-compose up -d` away. Maybe one day even rootless.
 You might need to restart Janus with `sudo docker-compose restart janus` because docker-compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
 
+## Controller
+
+You can run the latest controller with the `docker-compose.controller.yaml` file. Per default this uses the provided keycloak. You can set different settings using the env vars or by changing the config file `controller/config.toml`
+
+## Frontend
+
+You can run the latest frontend with the `docker-compose.frontend.yaml` file. Per default it tries to use a local backend deployed at localhost:8000
+
 ## GitLab Container Registry
 
 In order to compose the some containers, your docker needs to have access to the heinlein-video container registry.
-You can login your docker daemon to the repositry by creating an access token.
+You can login your docker daemon to the repository by creating an access token.
 
 Create an access token for the heinlein-video package/container registry:
 
@@ -29,10 +37,12 @@ Static Auth Secret: k3k
 
 ## Keycloack
 
+You can use the provided keycloak in docker-compose.oidc.yml or use a central one.
+
 Admin User: admin
 Admin Password: admin
 
-You need to create a new user **with** filled out Firstname, Lastname, and E-Mail
+A test user with credentials test and test is created upon start.
 
 # Metrics
 

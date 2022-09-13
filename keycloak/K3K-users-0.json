@@ -1,0 +1,41 @@
+{
+  "realm" : "K3K",
+  "users" : [ {
+    "id" : "acb24e90-db02-4586-8032-593a40c49c28",
+    "createdTimestamp" : 1663083230047,
+    "username" : "service-account-controller",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "serviceAccountClientId" : "Controller",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-k3k" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "bd85030c-2dac-42d2-9602-299c986925aa",
+    "createdTimestamp" : 1663084701505,
+    "username" : "test",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "TestFirst",
+    "lastName" : "TestLast",
+    "email" : "test@exmaple.com",
+    "credentials" : [ {
+      "id" : "9b811bb1-1fbe-49fe-af76-fa18cf5dd05c",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1663084707572,
+      "secretData" : "{\"value\":\"fhhKxcch0rkOqyrE0K8JM4Ycy/VPLPZF5DOR8IKziL4GFo267Kq8L7yfxrW9fuMc0FVTshcfs5Pn10UtUsO29Q==\",\"salt\":\"3/R54at+sneXO9KMroM9ew==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-k3k" ],
+    "notBefore" : 0,
+    "groups" : [ "/TestGroup" ]
+  } ]
+}

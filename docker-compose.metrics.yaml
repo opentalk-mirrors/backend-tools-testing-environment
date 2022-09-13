@@ -1,6 +1,8 @@
 ---
 version: "3.3"
 networks:
+    rabbitmq: null
+    redis: null
     prometheus: null
 volumes:
     rabbitmq-prometheus_prometheus: null
@@ -10,7 +12,8 @@ services:
         # https://hub.docker.com/r/prom/prometheus/tags
         image: quay.io/prometheus/prometheus:latest
         networks:
-            - "prometheus"
+            - rabbitmq
+            - prometheus
         ports:
             - "9090:9090"
         volumes:
@@ -38,6 +41,7 @@ services:
             - REDIS_EXPORTER_COUNT_KEYS=k3k-signaling:runner:*,k3k-signaling:room=*:participant=*:namespace=media:state
         networks:
             - "prometheus"
+            - "redis"
 
     grafana:
         # https://hub.docker.com/r/grafana/grafana/tags

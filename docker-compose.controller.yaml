@@ -1,0 +1,20 @@
+---
+version: "3.3"
+
+services:
+  controller:
+    image: git.heinlein-video.de:5050/heinlein-video/k3k-controller:latest
+    volumes:
+      - ./controller/config.toml:/controller/config.toml
+    environment:
+      - RUST_LOG=info
+      # - K3K_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
+      # - K3K_CTRL__KEYCLOAK__REALM=K3K
+      # - K3K_CTRL__ETHERPAD__URL=http://etherpad/
+      # - K3K_CTRL__ETHERPAD__API_KEY=secret
+
+    network_mode: host
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
