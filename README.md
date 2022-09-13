@@ -5,6 +5,18 @@ Ready to run testing environments for k3k-signaling and k3k-controller
 Just a simple `sudo docker-compose up -d` away. Maybe one day even rootless.
 You might need to restart Janus with `sudo docker-compose restart janus` because docker-compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
 
+## GitLab Container Registry
+
+In order to compose the some containers, your docker needs to have access to the heinlein-video container registry.
+You can login your docker daemon to the repositry by creating an access token.
+
+Create an access token for the heinlein-video package/container registry:
+
+1. Navigate in gitlab to your `profile` > `Access Tokens`
+2. Create a new token with `read_registry` & `write_registry` scope
+3. Copy the access token string
+4. run `docker login git.heinlein-video.de:5050 -u <username> -p <access token string>`
+
 ## Rabbit MQ
 
 ManagementURL: http://localhost:8280
@@ -12,9 +24,11 @@ Username: guest
 Password: guest
 
 ## Turn
+
 Static Auth Secret: k3k
 
 ## Keycloack
+
 Admin User: admin
 Admin Password: admin
 
@@ -27,7 +41,9 @@ docker-compose -f docker-compose.yaml -f docker-compose.metrics.yaml up -d
 
 This starts
 Prometheus and Grafana and node-exporter
+
 ## Grafana
+
 HTTP Port: 9000
 User/Password: admin:admin
 
@@ -39,3 +55,13 @@ User/Password: admin:admin
 4. In the dialog where it shows you the access_token, scroll down and copy the id_token
 5. Select the Variables tab in the Controller collection and paste the id_token into the current field of the variable.
 6. Call the Login Endpoint
+
+## Etherpad
+
+You need to have an heinlein-video access token configuered for docker in order to compose this container. See [GitLab Container Registry](#gitlab-container-registry)
+
+Run the etherpad container with:
+
+```s
+docker-compose -f docker-compose.etherpad.yaml up -d
+```
