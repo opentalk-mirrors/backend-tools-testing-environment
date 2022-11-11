@@ -68,10 +68,20 @@ User/Password: admin:admin
 
 ## Etherpad
 
-You need to have an heinlein-video access token configuered for docker in order to compose this container. See [GitLab Container Registry](#gitlab-container-registry)
+You need to have an heinlein-video access token configuered for docker in order to compose this container.
+See [GitLab Container Registry](#gitlab-container-registry)
 
 Run the etherpad container with:
 
 ```s
 docker-compose -f docker-compose.etherpad.yaml up -d
 ```
+
+## MinIO
+
+The container will create a `minio/` folder where the state of the storage is held. Removing the folder and keeping the
+database will result in an invalid state for all assets.
+
+A bucket with the name `controller` is created by default.
+
+The MinIO `ACCESS_KEY` and `SECRET_KEY` have the value `minioadmin` pre-configured (same as root user login).
