@@ -1,5 +1,5 @@
 ---
-version: "3.3"
+version: '3.3'
 networks:
   postgres: null
 services:
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import:Z
     ports:
-      - "8080:8080"
+      - 8080:8080
     networks:
       - postgres
     depends_on:

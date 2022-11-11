@@ -1,5 +1,5 @@
 ---
-version: "3.3"
+version: '3.3'
 networks:
     rabbitmq: null
     redis: null
@@ -15,22 +15,22 @@ services:
             - rabbitmq
             - prometheus
         ports:
-            - "9090:9090"
+            - 9090:9090
         volumes:
             - rabbitmq-prometheus_prometheus:/prometheus
             - ./prometheus.yml:/etc/prometheus/prometheus.yml
     node-exporter:
         command:
-            - '--path.procfs=/host/proc'
-            - '--path.rootfs=/rootfs'
-            - '--path.sysfs=/host/sys'
-            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+            - --path.procfs=/host/proc
+            - --path.rootfs=/rootfs
+            - --path.sysfs=/host/sys
+            - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
         expose:
             - 9100
             # https://hub.docker.com/r/prom/node-exporter/tags
         image: quay.io/prometheus/node-exporter:latest
         networks:
-            - "prometheus"
+            - prometheus
         volumes:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
@@ -40,16 +40,16 @@ services:
         environment:
             - REDIS_EXPORTER_COUNT_KEYS=k3k-signaling:runner:*,k3k-signaling:room=*:participant=*:namespace=media:state
         networks:
-            - "prometheus"
-            - "redis"
+            - prometheus
+            - redis
 
     grafana:
         # https://hub.docker.com/r/grafana/grafana/tags
         image: grafana/grafana:8.2.3
         ports:
-            - "9000:3000"
+            - 9000:3000
         networks:
-            - "prometheus"
+            - prometheus
         volumes:
             - rabbitmq-prometheus_grafana:/var/lib/grafana
             - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml
@@ -63,4 +63,4 @@ services:
             # https://grafana.com/plugins/michaeldmoore-multistat-panel
             # https://grafana.com/plugins/vonage-status-panel
             # https://grafana.com/plugins/yesoreyeram-boomtable-panel
-            GF_INSTALL_PLUGINS: "flant-statusmap-panel,grafana-piechart-panel"
+            GF_INSTALL_PLUGINS: flant-statusmap-panel,grafana-piechart-panel
