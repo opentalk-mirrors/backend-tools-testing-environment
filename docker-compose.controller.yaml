@@ -3,7 +3,7 @@ version: '3.3'
 
 services:
   controller:
-    image: git.heinlein-video.de:5050/heinlein-video/k3k-controller:latest
+    image: git.opentalk.dev:5050/heinlein-video/k3k-controller:latest
     volumes:
       - ./controller/config.toml:/controller/config.toml
     environment:
