@@ -31,7 +31,7 @@ services:
             - --static-auth-secret=k3k
             - --realm=opentalk.dev
     janus:
-        image: git.opentalk.dev:5050/heinlein-video/ot-janus-gateway:0.12.4-2
+        image: git.opentalk.dev:5050/opentalk/ot-janus-gateway:0.12.4-2
         command:
             - janus
         network_mode: host
