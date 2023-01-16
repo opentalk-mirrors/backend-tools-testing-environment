@@ -2,7 +2,7 @@
 version: '3.3'
 services:
   etherpad:
-    image: git.opentalk.dev:5050/heinlein-video/backend/ot-etherpad:latest
+    image: git.opentalk.dev:5050/opentalk/backend/ot-etherpad:latest
     volumes:
       - type: bind
         source: ./etherpad/APIKEY.txt

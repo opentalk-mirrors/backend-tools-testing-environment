@@ -15,15 +15,15 @@ You can run the latest frontend with the `docker-compose.frontend.yaml` file. Pe
 
 ## GitLab Container Registry
 
-In order to compose the some containers, your docker needs to have access to the heinlein-video container registry.
+In order to compose the some containers, your docker needs to have access to the `opentalk` container registry.
 You can login your docker daemon to the repository by creating an access token.
 
-Create an access token for the heinlein-video package/container registry:
+Create an access token for the `opentalk` package/container registry:
 
 1. Navigate in gitlab to your `profile` > `Access Tokens`
 2. Create a new token with `read_registry` & `write_registry` scope
 3. Copy the access token string
-4. run `docker login git.heinlein-video.de:5050 -u <username> -p <access token string>`
+4. run `docker login git.opentalk.dev:5050 -u <username> -p <access token string>`
 
 ## Rabbit MQ
 
@@ -68,7 +68,7 @@ User/Password: admin:admin
 
 ## Etherpad
 
-You need to have an heinlein-video access token configuered for docker in order to compose this container.
+You need to have an `opentalk` access token configuered for docker in order to compose this container.
 See [GitLab Container Registry](#gitlab-container-registry)
 
 Run the etherpad container with:
