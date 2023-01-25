@@ -137,6 +137,12 @@ url = "redis://localhost:6379/"
 # Etherpads api key
 #api_key = "secret"
 
+[minio]
+uri = "http://localhost:9555"
+bucket = "controller"
+access_key = "minioadmin"
+secret_key = "minioadmin"
+
 # Default/fallback values
 #[defaults]
 # Default language of a new user
