@@ -38,7 +38,7 @@ services:
     redis-exporter:
         image: quay.io/oliver006/redis_exporter
         environment:
-            - REDIS_EXPORTER_COUNT_KEYS=k3k-signaling:runner:*,k3k-signaling:room=*:participant=*:namespace=media:state
+            - REDIS_EXPORTER_COUNT_KEYS=opentalk-signaling:runner:*,opentalk-signaling:room=*:participant=*:namespace=media:state
         networks:
             - prometheus
             - redis

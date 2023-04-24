@@ -94,7 +94,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/auth/realms/K3K/protocol/openid-connect/token",
+					"raw": "http://localhost:8080/auth/realms/OPENTALK/protocol/openid-connect/token",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -103,7 +103,7 @@
 					"path": [
 						"auth",
 						"realms",
-						"K3K",
+						"OPENTALK",
 						"protocol",
 						"openid-connect",
 						"token"
@@ -133,12 +133,12 @@
 			},
 			{
 				"key": "accessTokenUrl",
-				"value": "http://localhost:8080/auth/realms/K3K/protocol/openid-connect/token",
+				"value": "http://localhost:8080/auth/realms/OPENTALK/protocol/openid-connect/token",
 				"type": "string"
 			},
 			{
 				"key": "authUrl",
-				"value": "http://localhost:8080/auth/realms/K3K/protocol/openid-connect/auth",
+				"value": "http://localhost:8080/auth/realms/OPENTALK/protocol/openid-connect/auth",
 				"type": "string"
 			},
 			{
