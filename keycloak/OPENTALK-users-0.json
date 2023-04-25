@@ -1,5 +1,5 @@
 {
-  "realm" : "K3K",
+  "realm" : "OPENTALK",
   "users" : [ {
     "id" : "acb24e90-db02-4586-8032-593a40c49c28",
     "createdTimestamp" : 1663083230047,
@@ -11,7 +11,7 @@
     "credentials" : [ ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-k3k" ],
+    "realmRoles" : [ "default-roles-opentalk" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -34,7 +34,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-k3k" ],
+    "realmRoles" : [ "default-roles-opentalk" ],
     "notBefore" : 0,
     "groups" : [ "/TestGroup" ]
   } ]

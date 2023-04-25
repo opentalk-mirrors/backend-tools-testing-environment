@@ -4,12 +4,12 @@ networks:
   rabbitmq-prometheus: null
 services:
   frontend:
-    image: git.opentalk.dev:5050/opentalk/k3k-web-frontend:latest
+    image: git.opentalk.dev:5050/opentalk/frontend/web-app:latest
 
     ports:
       - 3000:80
     environment:
       - CONTROLLER_HOST=localhost:8000
       - BASE_URL=http://localhost:3000
-      - OIDC_ISSUER=http://localhost:8080/auth/realms/K3K
+      - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
       - INSECURE=true

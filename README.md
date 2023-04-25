@@ -1,6 +1,6 @@
 # Testing Environments
 
-Ready to run testing environments for k3k-signaling and k3k-controller
+Ready to run testing environments for opentalk-signaling and opentalk-controller
 
 Just a simple `sudo docker-compose up -d` away. Maybe one day even rootless.
 You might need to restart Janus with `sudo docker-compose restart janus` because docker-compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
@@ -33,7 +33,7 @@ Password: guest
 
 ## Turn
 
-Static Auth Secret: k3k
+Static Auth Secret: opentalk
 
 ## Keycloack
 

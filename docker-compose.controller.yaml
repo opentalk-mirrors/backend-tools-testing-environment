@@ -3,15 +3,15 @@ version: '3.3'
 
 services:
   controller:
-    image: git.opentalk.dev:5050/opentalk/k3k-controller:latest
+    image: git.opentalk.dev:5050/opentalk/backend/controller:latest
     volumes:
       - ./controller/config.toml:/controller/config.toml
     environment:
       - RUST_LOG=info
-      # - K3K_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
-      # - K3K_CTRL__KEYCLOAK__REALM=K3K
-      # - K3K_CTRL__ETHERPAD__URL=http://etherpad/
-      # - K3K_CTRL__ETHERPAD__API_KEY=secret
+      # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
+      # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
+      # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
+      # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
 
     network_mode: host
     ports:
