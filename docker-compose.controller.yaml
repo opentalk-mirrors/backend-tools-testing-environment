@@ -3,7 +3,7 @@ version: '3.3'
 
 services:
   controller:
-    image: git.opentalk.dev:5050/opentalk/backend/controller:latest
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller:latest
     volumes:
       - ./controller/config.toml:/controller/config.toml
     environment:
