@@ -1,0 +1,12 @@
+[auth]
+issuer = "https://example.org/auth/realms/OpenTalk/"
+client_id = "Recorder"
+client_secret = "INSERT_KEY"
+
+[controller]
+domain = "localhost:8000"
+insecure = true
+
+[rabbitmq]
+uri = "amqp://guest:guest@localhost/%2F"
+queue = "opentalk_recorder"
