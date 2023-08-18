@@ -50,7 +50,8 @@ services:
             - JANUS_IGNORE_MDS=true # remove if not wanted
             - JANUS_HTTP_ADMIN=true
         depends_on:
-            - rabbitmq
+            rabbitmq:
+                condition: service_healthy
     rabbitmq:
         image: rabbitmq:3-management
         environment:
@@ -60,6 +61,11 @@ services:
             - 5672:5672
         networks:
             - rabbitmq
+        healthcheck:
+            test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
+            interval: 1s
+            timeout: 3s
+            retries: 60
     redis:
         image: redis:alpine
         command:
