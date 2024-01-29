@@ -85,3 +85,16 @@ database will result in an invalid state for all assets.
 A bucket with the name `controller` is created by default.
 
 The MinIO `ACCESS_KEY` and `SECRET_KEY` have the value `minioadmin` pre-configured (same as root user login).
+
+
+## Nextcloud
+
+Will start a nextcloud behind an apache, available on the host on port 9002. Uses the example credentials from the
+example `controller.toml`(exampleuser:v3rys3cr3t). The container creates a `nextcloud` folder, in which the data from
+the nextcloud is stored. 
+
+Run nextcloud container with:
+
+```shell
+docker compose -f docker-compose.nextcloud.yaml up -d
+```
