@@ -2,7 +2,7 @@
 version: '3.3'
 
 services:
-  controller:
+  recorder:
     image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
     volumes:
       - ./recorder/config.toml:/recorder/config.toml
