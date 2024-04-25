@@ -1,3 +1,4 @@
 minio/
 pg_data/
 nextcloud/
+.DS_Store
