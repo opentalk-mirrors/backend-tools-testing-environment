@@ -1,94 +1,287 @@
 ---
-version: '3.3'
-networks:
-    rabbitmq: null
-    redis: null
-    postgres: null
+volumes:
+  rabbitmq-prometheus_prometheus: null
+  rabbitmq-prometheus_grafana: null
+
+
 services:
-    postgres:
-        image: postgres:15-alpine
-        environment:
-            POSTGRES_DB: opentalk
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: password123
-            POSTGRES_HOST_AUTH_METHOD: trust
-        ports:
-            - 5432:5432
-        volumes:
-            - ./pg_data:/var/lib/postgresql/data
-            - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-        command:
-            - postgres
-            - -c
-            - shared_preload_libraries=pg_stat_statements
-        networks:
-            - postgres
-    turn:
-        image: coturn/coturn:latest
-        network_mode: host
-        command:
-            - --use-auth-secret
-            - --static-auth-secret=opentalk
-            - --realm=opentalk.dev
-    janus:
-        image: git.opentalk.dev:5050/opentalk/backend/containers/janus-gateway:0.12.4-2
-        command:
-            - janus
-        network_mode: host
-        environment:
-            - WAITTIMEOUT=30
-            - RABBITMQ_HOST=localhost
-            - JANUS_EXCHANGE=janus-exchange
-            - JANUS_EXCHANGE_TYPE=topic
-            - JANUS_QUEUE_INCOMING=to-janus
-            - JANUS_ROUTING_KEY_OUTGOING=from-janus
-            - JANUS_ICE_IF=ens192
-            - JANUS_EVENT_LOOPS=92
-            - JANUS_ICE_LITE=true
-            #            - JANUS_DISABLE_WEBSOCKET=true
-            - JANUS_UDP_PORT_RANGE=20000:25000
-            - JANUS_IGNORE_MDS=true # remove if not wanted
-            - JANUS_HTTP_ADMIN=true
-        depends_on:
-            rabbitmq:
-                condition: service_healthy
-    rabbitmq:
-        image: rabbitmq:3-management
-        environment:
-            RABBITMQ_SERVER_ADITIONAL_ERL_ARGS: -rabbit log.console.level=debug
-        ports:
-            - 8280:15672
-            - 5672:5672
-        networks:
-            - rabbitmq
-        healthcheck:
-            test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
-            interval: 1s
-            timeout: 3s
-            retries: 60
-    redis:
-        image: redis:alpine
-        command:
-            - /usr/local/etc/redis/redis.conf
-        volumes:
-            - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
-        ports:
-            - 6379:6379
-        networks:
-            - redis
-    minio:
-        image: minio/minio:latest
-        volumes:
-            - ./minio/storage:/data
-        entrypoint: ''
-        command: >
-            sh -c '
-            mkdir -p /data/controller &&
-            /usr/bin/docker-entrypoint.sh server /data --address ":9555" --console-address ":9556"
-            '
-        environment:
-            MINIO_ROOT_USER: minioadmin
-            MINIO_ROOT_PASSWORD: minioadmin
-        ports:
-            - 9555:9555
-            - 9556:9556
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: opentalk
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+
+  turn:
+    image: coturn/coturn:latest
+    network_mode: host
+    command:
+      - --use-auth-secret
+      - --static-auth-secret=opentalk
+      - --realm=opentalk.dev
+
+  janus:
+    image: git.opentalk.dev:5050/opentalk/backend/containers/janus-gateway:0.12.4-2
+    command:
+      - janus
+    network_mode: host
+    environment:
+      - WAITTIMEOUT=30
+      - RABBITMQ_HOST=localhost
+      - JANUS_EXCHANGE=janus-exchange
+      - JANUS_EXCHANGE_TYPE=topic
+      - JANUS_QUEUE_INCOMING=to-janus
+      - JANUS_ROUTING_KEY_OUTGOING=from-janus
+      - JANUS_ICE_IF=ens192
+      - JANUS_EVENT_LOOPS=92
+      - JANUS_ICE_LITE=true
+      #            - JANUS_DISABLE_WEBSOCKET=true
+      - JANUS_UDP_PORT_RANGE=20000:25000
+      - JANUS_IGNORE_MDS=true # remove if not wanted
+      - JANUS_HTTP_ADMIN=true
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_SERVER_ADITIONAL_ERL_ARGS: -rabbit log.console.level=debug
+    ports:
+      - 8280:15672
+      - 5672:5672
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
+      interval: 1s
+      timeout: 10s
+      retries: 60
+
+  redis:
+    image: redis:alpine
+    command:
+      - /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
+    ports:
+      - 6379:6379
+
+  minio:
+    image: minio/minio:latest
+    volumes:
+      - ./minio/storage:/data
+    entrypoint: ''
+    command: >
+      sh -c '
+      mkdir -p /data/controller &&
+      /usr/bin/docker-entrypoint.sh server /data --address ":9555" --console-address ":9556"
+      '
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - 9555:9555
+      - 9556:9556
+
+  controller-ee:
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller-enterprise:latest
+    profiles:
+      - backend-ee
+    volumes:
+      - ./controller/config.toml:/controller/config.toml
+    environment:
+      - RUST_LOG=info
+      # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
+      # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
+      # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
+      # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
+    network_mode: host
+
+  controller:
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller:latest
+    profiles:
+      - backend
+    volumes:
+      - ./controller/config.toml:/controller/config.toml
+    environment:
+      - RUST_LOG=info
+      # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
+      # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
+      # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
+      # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
+    network_mode: host
+
+  etherpad:
+    image: git.opentalk.dev:5050/opentalk/backend/containers/etherpad:latest
+    profiles:
+      - etherpad
+    volumes:
+      - type: bind
+        source: ./etherpad/APIKEY.txt
+        target: /opt/etherpad-lite/APIKEY.txt
+    environment:
+      # Set TRUST_PROXY if the etherpad is behind a reverse proxy
+      # - TRUST_PROXY=true
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
+    ports:
+      - 9001:9001
+
+  ndt:
+    image: measurementlab/ndt-server:latest
+    profiles:
+      - extras
+    volumes:
+      # - ./ndt/certs:/certs
+      # - ./ndt/html:/html
+      - ./ndt/datadir:/datadir
+    cap_drop:
+      - ALL
+    ports:
+      # - 10443:4443
+      - 10081:8080
+    command:
+      # - -cert
+      # - /certs/cert.pem
+      # - -key
+      # - /certs/key.pem
+      - -datadir
+      - /datadir
+      # - -ndt7_addr
+      # - :4443
+      - -ndt7_addr_cleartext
+      - :8080
+
+  frontend:
+    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:latest
+    profiles:
+      - frontend
+    ports:
+      - 3000:80
+    environment:
+      - CONTROLLER_HOST=localhost:8000
+      - BASE_URL=http://localhost:3000
+      - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
+      - INSECURE=true
+
+  prometheus:
+    # https://hub.docker.com/r/prom/prometheus/tags
+    image: quay.io/prometheus/prometheus:latest
+    profiles:
+      - metrics
+    ports:
+      - 9090:9090
+    volumes:
+      - rabbitmq-prometheus_prometheus:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    profiles:
+      - metrics
+    command:
+      - --path.procfs=/host/proc
+      - --path.rootfs=/rootfs
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
+    expose:
+      - 9100
+      # https://hub.docker.com/r/prom/node-exporter/tags
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
+  redis-exporter:
+    image: quay.io/oliver006/redis_exporter
+    profiles:
+      - metrics
+    environment:
+      - REDIS_EXPORTER_COUNT_KEYS=opentalk-signaling:runner:*,opentalk-signaling:room=*:participant=*:namespace=media:state
+
+  grafana:
+    # https://hub.docker.com/r/grafana/grafana/tags
+    image: grafana/grafana:8.2.3
+    profiles:
+      - metrics
+    ports:
+      - 9000:3000
+    volumes:
+      - rabbitmq-prometheus_grafana:/var/lib/grafana
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml
+      - ./grafana/dashboards:/dashboards
+    environment:
+      # https://grafana.com/plugins/flant-statusmap-panel
+      # https://grafana.com/plugins/grafana-piechart-panel
+      # https://grafana.com/plugins/grafana-polystat-panel
+      # https://grafana.com/plugins/jdbranham-diagram-panel
+      # https://grafana.com/plugins/michaeldmoore-multistat-panel
+      # https://grafana.com/plugins/vonage-status-panel
+      # https://grafana.com/plugins/yesoreyeram-boomtable-panel
+      GF_INSTALL_PLUGINS: flant-statusmap-panel,grafana-piechart-panel
+
+  nextcloud:
+    image: docker.io/library/nextcloud:apache
+    profiles:
+      - sharedfolder
+    volumes:
+      - ./nextcloud:/var/www/html
+    environment:
+      - SQLITE_DATABASE=nextcloud
+      - NEXTCLOUD_ADMIN_USER=exampleuser
+      - NEXTCLOUD_ADMIN_PASSWORD=v3rys3cr3t
+    ports:
+      - 9002:80
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0
+    restart: always
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/keycloak
+      KC_DB_USERNAME: postgres
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # KC_HOSTNAME: keycloak
+      KC_HTTP_RELATIVE_PATH: /auth
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:Z
+    ports:
+      - 8080:8080
+
+  recorder:
+    image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
+    profiles:
+      - recorder
+    volumes:
+      - ./recorder/config.toml:/recorder/config.toml
+    environment:
+      - RUST_LOG=info
+    network_mode: host
+
+  jaeger:
+    image: quay.io/jaegertracing/all-in-one:1
+    profiles:
+      - metrics
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 9411:9411

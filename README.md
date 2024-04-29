@@ -2,16 +2,49 @@
 
 Ready to run testing environments for opentalk-signaling and opentalk-controller
 
-Just a simple `sudo docker-compose up -d` away. Maybe one day even rootless.
-You might need to restart Janus with `sudo docker-compose restart janus` because docker-compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
+Just a simple `docker compose up -d` away. This will start all the base componenets OpenTalk depends on(rabbitMQ, redis, keycloak, etc.). Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development. You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`. `docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
+
+You might need to restart Janus with `docker compose restart janus` because docker compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
+
+## Profiles
+
+- no profile(always enabled)
+  - postgres
+  - rabbitmq
+  - janus
+  - keycloak
+  - redis
+  - minio
+  - turn
+- frontend
+  - web-app
+- backend
+  - controller
+- backend-ee
+  - controller-ee
+- recorder
+  - recorder
+- sharedfolder
+  - nextcloud
+- spacedeck 
+  - spacedeck
+- etherpad
+  - etherpad
+- metrics
+  - prometheus
+  - grafana
+  - node-exporter
+  - redis-exporter
+
 
 ## Controller
 
-You can run the latest controller with the `docker-compose.controller.yaml` file. Per default this uses the provided keycloak. You can set different settings using the env vars or by changing the config file `controller/config.toml`
+You can run the latest controller using either the `backend` or `backend-ee` profile.
+Per default this uses the provided keycloak. You can set different settings using the env vars or by changing the config file `controller/config.toml`
 
 ## Frontend
 
-You can run the latest frontend with the `docker-compose.frontend.yaml` file. Per default it tries to use a local backend deployed at localhost:8000
+You can run the latest frontend with the `frontend` profile. Per default it tries to use a local backend deployed at localhost:8000.
 
 ## GitLab Container Registry
 
@@ -37,7 +70,7 @@ Static Auth Secret: opentalk
 
 ## Keycloack
 
-You can use the provided keycloak in docker-compose.oidc.yml or use a central one.
+You can use the provided keycloak or use a central one.
 
 Admin User: admin
 Admin Password: admin
@@ -47,7 +80,9 @@ A test user with credentials test and test is created upon start.
 # Metrics
 
 To also start the metrics stuff run:
-docker-compose -f docker-compose.yaml -f docker-compose.metrics.yaml up -d
+```shell
+docker compose --profile metrics up
+```
 
 This starts
 Prometheus and Grafana and node-exporter
@@ -73,8 +108,8 @@ See [GitLab Container Registry](#gitlab-container-registry)
 
 Run the etherpad container with:
 
-```s
-docker-compose -f docker-compose.etherpad.yaml up -d
+```shell
+docker compose --profile etherpad up
 ```
 
 ## MinIO
@@ -96,5 +131,5 @@ the nextcloud is stored.
 Run nextcloud container with:
 
 ```shell
-docker compose -f docker-compose.nextcloud.yaml up -d
+docker compose -profile sharedfolder up
 ```
