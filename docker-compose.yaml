@@ -105,6 +105,19 @@ services:
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
       # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
     network_mode: host
+    depends_on:
+      postgres:
+        condition: service_started
+        restart: true
+      janus:
+        condition: service_started
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+      keycloak:
+        condition: service_healthy
+        restart: true
 
   controller:
     image: git.opentalk.dev:5050/opentalk/backend/services/controller:latest
@@ -119,6 +132,19 @@ services:
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
       # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
     network_mode: host
+    depends_on:
+      postgres:
+        condition: service_started
+        restart: true
+      janus:
+        condition: service_started
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+      keycloak:
+        condition: service_healthy
+        restart: true
 
   etherpad:
     image: git.opentalk.dev:5050/opentalk/backend/containers/etherpad:latest
@@ -249,6 +275,7 @@ services:
     command:
       - start-dev
       - --import-realm
+      - --health-enabled=true
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
@@ -261,6 +288,11 @@ services:
       - ./keycloak:/opt/keycloak/data/import:Z
     ports:
       - 8080:8080
+    healthcheck:
+      test: curl -fsS http://keycloak:8080/auth/health/ready -o - | grep UP
+      interval: 20s
+      timeout: 120s
+      retries: 10
 
   recorder:
     image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
