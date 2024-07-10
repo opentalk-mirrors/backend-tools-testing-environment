@@ -36,6 +36,18 @@ You might need to restart Janus with `docker compose restart janus` because dock
   - node-exporter
   - redis-exporter
 
+## User
+
+There are multiple users created by default.
+
+| First name | Last name | Login   | Email               | Password  |
+| ---------- | --------- | ------- | ------------------- | --------- |
+| first      | last      | test    | foo@example.com     | `test`    |
+| Alice      | Adams     | alice   | alice@example.com   | `alice`   |
+| Bob        | Burton    | bob     | bob@example.com     | `bob`     |
+| Charlie    | Cooper    | charlie | charlie@example.com | `charlie` |
+| Dave       | Dunn      | dave    | dave@example.com    | `dave`    |
+| Erin       | Eaton     | erin    | erin@example.com    | `erin`    |
 
 ## Controller
 
