@@ -3,7 +3,6 @@ volumes:
   rabbitmq-prometheus_prometheus: null
   rabbitmq-prometheus_grafana: null
 
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -270,7 +269,7 @@ services:
       - 9002:80
 
   keycloak:
-    image: quay.io/keycloak/keycloak:19.0
+    image: quay.io/keycloak/keycloak:25.0
     restart: always
     command:
       - start-dev
@@ -289,8 +288,13 @@ services:
     ports:
       - 8080:8080
     healthcheck:
-      test: curl -fsS http://keycloak:8080/auth/health/ready -o - | grep UP
-      interval: 20s
+      test: >
+        /opt/keycloak/bin/kcadm.sh config credentials
+        --server http://keycloak:8080/auth
+        --realm OPENTALK
+        --user test
+        --password test
+      interval: 5s
       timeout: 120s
       retries: 10
 
