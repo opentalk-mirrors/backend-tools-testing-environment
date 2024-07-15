@@ -1,7 +1,7 @@
 [auth]
-issuer = "https://example.org/auth/realms/OpenTalk/"
+issuer = "https://localhost:8080/auth/realms/OPENTALK/"
 client_id = "Recorder"
-client_secret = "INSERT_KEY"
+client_secret = "wcAlX5I26FdA76aJhFj9PyWd9LWNX9j0"
 
 [controller]
 domain = "localhost:8000"

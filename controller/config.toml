@@ -86,6 +86,10 @@ url = "amqp://guest:guest@localhost/%2F"
 # mailing is disabled when this is not set.
 #mail_task_queue = "opentalk_mailer"
 
+# The rabbitmq queue name for the recorder,
+# recording is disabled when this is not set.
+recording_task_queue = "opentalk_recorder"
+
 # Minimum amount of connections to retain when removing stale connections
 #min_connections = 10
 

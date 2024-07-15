@@ -143,5 +143,6 @@ the nextcloud is stored.
 Run nextcloud container with:
 
 ```shell
-docker compose -profile sharedfolder up
+docker compose --profile sharedfolder up
 ```
+
