@@ -84,7 +84,7 @@ from_routing_key = "from-janus"
 url = "amqp://guest:guest@localhost/%2F"
 # The rabbitmq queue name for the mail worker,
 # mailing is disabled when this is not set.
-#mail_task_queue = "opentalk_mailer"
+mail_task_queue = "opentalk_mailer"
 
 # The rabbitmq queue name for the recorder,
 # recording is disabled when this is not set.
@@ -140,6 +140,17 @@ url = "redis://localhost:6379/"
 #url = "http://localhost:9001"
 # Etherpads api key
 #api_key = "secret"
+
+# Shared folder configuration
+[shared_folder]
+provider = "nextcloud"
+url = "http://localhost:9002"
+username = "exampleuser"
+password = "v3rys3cr3t"
+# Optional subdirectory under the user's folder
+#directory = "opentalk/meetings"
+# Optional expiry of folder shares in days
+#expiry = 48
 
 [minio]
 uri = "http://localhost:9555"

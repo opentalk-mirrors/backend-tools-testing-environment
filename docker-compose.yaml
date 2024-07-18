@@ -196,6 +196,7 @@ services:
       - CONTROLLER_HOST=localhost:8000
       - BASE_URL=http://localhost:3000
       - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
+      - FEATURE_SHARED_FOLDER=true
       - INSECURE=true
 
   prometheus:
@@ -321,3 +322,21 @@ services:
       - 14268:14268
       - 14250:14250
       - 9411:9411
+
+  smtp-mailer:
+    image: git.opentalk.dev:5050/opentalk/backend/services/smtp-mailer:dev
+    profiles:
+      - mailer
+    volumes:
+      - ./smtp-mailer/config.toml:/opt/smtp-mailer/config.toml
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  mailcrab:
+    image: marlonb/mailcrab:latest
+    profiles:
+      - mailer
+    ports:
+      - 1080:1080
+      - 1025:1025
