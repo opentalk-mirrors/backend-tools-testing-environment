@@ -300,12 +300,12 @@ services:
     ports:
       - 8080:8080
     healthcheck:
-      test: >
-        /opt/keycloak/bin/kcadm.sh config credentials
-        --server http://keycloak:8080/auth
-        --realm OPENTALK
-        --user test
-        --password test
+      test: |
+        exec 3<>/dev/tcp/localhost/9000 && echo "GET /auth/health/ready HTTP/1.1
+        Host: localhost:9000
+        User-Agent: curl/8.8.0
+        Accept: */*
+        " >&3 && head -6 <&3 | grep 'UP'
       interval: 5s
       timeout: 120s
       retries: 10
