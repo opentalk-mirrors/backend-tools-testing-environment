@@ -147,6 +147,14 @@ services:
         condition: service_healthy
         restart: true
 
+  terdoc:
+    image: git.opentalk.dev:5050/opentalk/backend/services/terdoc:latest
+    profiles:
+      - backend
+      - report
+    network_mode: host
+    command: [-vv]
+
   etherpad:
     image: git.opentalk.dev:5050/opentalk/backend/containers/etherpad:latest
     profiles:
