@@ -152,7 +152,8 @@ services:
     profiles:
       - backend
       - report
-    network_mode: host
+    ports:
+      - 6560:6560
     command: [-vv]
 
   etherpad:

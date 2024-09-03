@@ -182,8 +182,8 @@ secret_key = "minioadmin"
 #api_key = "secret"
 
 # Reports configuration
-#[reports]
-#url = "http://localhost:8085"
+[reports]
+url = "http://localhost:6560"
 
 # Shared folder configuration
 [shared_folder]
