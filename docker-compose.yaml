@@ -29,28 +29,13 @@ services:
       - --static-auth-secret=opentalk
       - --realm=opentalk.dev
 
-  janus:
-    image: git.opentalk.dev:5050/opentalk/backend/containers/janus-gateway:0.12.4-2
-    command:
-      - janus
+  livekit:
+    image: livekit/livekit-server:v1.7
     network_mode: host
-    environment:
-      - WAITTIMEOUT=30
-      - RABBITMQ_HOST=localhost
-      - JANUS_EXCHANGE=janus-exchange
-      - JANUS_EXCHANGE_TYPE=topic
-      - JANUS_QUEUE_INCOMING=to-janus
-      - JANUS_ROUTING_KEY_OUTGOING=from-janus
-      - JANUS_ICE_IF=ens192
-      - JANUS_EVENT_LOOPS=92
-      - JANUS_ICE_LITE=true
-      #            - JANUS_DISABLE_WEBSOCKET=true
-      - JANUS_UDP_PORT_RANGE=20000:25000
-      - JANUS_IGNORE_MDS=true # remove if not wanted
-      - JANUS_HTTP_ADMIN=true
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    restart: always
+    command: --config /livekit.yaml --dev --node-ip 127.0.0.1
+    volumes:
+      - ./livekit.yaml:/livekit.yaml
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -110,7 +95,7 @@ services:
       postgres:
         condition: service_started
         restart: true
-      janus:
+      livekit:
         condition: service_started
         restart: true
       redis:
@@ -137,7 +122,7 @@ services:
       postgres:
         condition: service_started
         restart: true
-      janus:
+      livekit:
         condition: service_started
         restart: true
       redis:
@@ -198,12 +183,13 @@ services:
       - :8080
 
   frontend:
-    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:latest
+    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:profiling
     profiles:
       - frontend
     ports:
       - 3000:80
     environment:
+      - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
       - BASE_URL=http://localhost:3000
       - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
