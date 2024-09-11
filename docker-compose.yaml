@@ -5,7 +5,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: opentalk
       POSTGRES_USER: postgres
@@ -20,6 +20,13 @@ services:
       - postgres
       - -c
       - shared_preload_libraries=pg_stat_statements
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   turn:
     image: coturn/coturn:latest
@@ -93,7 +100,7 @@ services:
     network_mode: host
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
         restart: true
       livekit:
         condition: service_started
@@ -120,7 +127,7 @@ services:
     network_mode: host
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
         restart: true
       livekit:
         condition: service_started
@@ -292,9 +299,15 @@ services:
         User-Agent: curl/8.8.0
         Accept: */*
         " >&3 && head -6 <&3 | grep 'UP'
-      interval: 5s
-      timeout: 120s
-      retries: 10
+      start_period: 180s
+      start_interval: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
 
   recorder:
     image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
