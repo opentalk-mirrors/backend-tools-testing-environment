@@ -55,7 +55,7 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     environment:
-      RABBITMQ_SERVER_ADITIONAL_ERL_ARGS: -rabbit log.console.level=debug
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
     ports:
       - 8280:15672
       - 5672:5672
@@ -152,7 +152,8 @@ services:
     profiles:
       - backend
       - report
-    network_mode: host
+    ports:
+      - 6560:6560
     command: [-vv]
 
   etherpad:
