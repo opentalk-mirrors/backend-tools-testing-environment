@@ -81,7 +81,7 @@ recording_task_queue = "opentalk_recorder"
 # Maximum number of amqp channels per connection
 #max_channels_per_connection = 100
 
-[redis]
+#[redis]
 # Configuration of a redis server which can be used for synchronizing multiple
 # controllers running in a cluster to provide an OpenTalk web api and meeting
 # signaling service.
@@ -91,7 +91,7 @@ recording_task_queue = "opentalk_recorder"
 # is left out entirely, then the service will run in "standalone" mode.
 #
 # Redis URL used to connect the redis server
-url = "redis://localhost:6379/"
+#url = "redis://localhost:6379/"
 
 #[turn]
 # Lifetime of the generated credentials (in seconds)
