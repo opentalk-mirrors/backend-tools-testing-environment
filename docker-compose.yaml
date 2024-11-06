@@ -307,13 +307,19 @@ services:
 
   recorder:
     image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
+    restart: always
     profiles:
       - recorder
     volumes:
       - ./recorder/config.toml:/recorder/config.toml
     environment:
-      - RUST_LOG=info
+      RUST_LOG: debug,k3k=debug,ezk=debug
+      RUST_BACKTRACE: full
+      GST_DEBUG: 3
     network_mode: host
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   jaeger:
     image: quay.io/jaegertracing/all-in-one:1
