@@ -57,39 +57,11 @@ client_secret = "QKwu4cYmwisLOU2XyqrWOYEDnap6Nubv"
 #                        attribute must be set here in external_id_user_attribute_name.
 #external_id_user_attribute_name = "my_user_attribute_name"
 
-[room_server]
-# Maximum bitrate allowed for media sessions that will be used to transmit webcam video/audio
-# Example: 1.5 Mbit/s
-max_video_bitrate = "1500000"
-
-# Maximum bitrate allowed for media sessions used for screen share
-# Example: 1MB/s
-max_screen_bitrate = "8000000"
-
-# Number of packets with with given `speaker_focus_level`
-# needed to detect a speaking participant.
-#
-# Default: 50 packets (1 second of audio)
-#speaker_focus_packets = "50"
-
-# Average value of audio level needed per packet.
-#
-# min: 127 (muted)
-# max: 0   (loud)
-# default: 50
-#speaker_focus_level = "50"
-
-# Connection settings for the channel used to talk to the room server.
-# Currently these should be equal to the settings in janus.transport.rabbitmq.jcfg
-# of the respective janus instance.
-[[room_server.connections]]
-exchange = "janus-exchange"
-from_routing_key = "from-janus"
-to_routing_key = "to-janus"
-
-# Optional setting to specify how many event loops are configured for this janus server
-# This value is used to balance new webRTC sessions on specific event loops.
-#event_loops = 92
+[livekit]
+api_key = "devkey"
+api_secret = "secret"
+public_url = "http://localhost:7880"
+service_url = "http://localhost:7880"
 
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
@@ -109,7 +81,7 @@ recording_task_queue = "opentalk_recorder"
 # Maximum number of amqp channels per connection
 #max_channels_per_connection = 100
 
-[redis]
+#[redis]
 # Configuration of a redis server which can be used for synchronizing multiple
 # controllers running in a cluster to provide an OpenTalk web api and meeting
 # signaling service.
@@ -119,7 +91,7 @@ recording_task_queue = "opentalk_recorder"
 # is left out entirely, then the service will run in "standalone" mode.
 #
 # Redis URL used to connect the redis server
-url = "redis://localhost:6379/"
+#url = "redis://localhost:6379/"
 
 #[turn]
 # Lifetime of the generated credentials (in seconds)

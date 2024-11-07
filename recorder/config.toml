@@ -10,3 +10,6 @@ insecure = true
 [rabbitmq]
 uri = "amqp://guest:guest@localhost/%2F"
 queue = "opentalk_recorder"
+
+[recorder]
+clock_format = "%d.%m.%y %X %Z"

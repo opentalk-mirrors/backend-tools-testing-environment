@@ -5,7 +5,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_DB: opentalk
       POSTGRES_USER: postgres
@@ -20,6 +20,13 @@ services:
       - postgres
       - -c
       - shared_preload_libraries=pg_stat_statements
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   turn:
     image: coturn/coturn:latest
@@ -29,28 +36,13 @@ services:
       - --static-auth-secret=opentalk
       - --realm=opentalk.dev
 
-  janus:
-    image: git.opentalk.dev:5050/opentalk/backend/containers/janus-gateway:0.12.4-2
-    command:
-      - janus
+  livekit:
+    image: livekit/livekit-server:v1.7
     network_mode: host
-    environment:
-      - WAITTIMEOUT=30
-      - RABBITMQ_HOST=localhost
-      - JANUS_EXCHANGE=janus-exchange
-      - JANUS_EXCHANGE_TYPE=topic
-      - JANUS_QUEUE_INCOMING=to-janus
-      - JANUS_ROUTING_KEY_OUTGOING=from-janus
-      - JANUS_ICE_IF=ens192
-      - JANUS_EVENT_LOOPS=92
-      - JANUS_ICE_LITE=true
-      #            - JANUS_DISABLE_WEBSOCKET=true
-      - JANUS_UDP_PORT_RANGE=20000:25000
-      - JANUS_IGNORE_MDS=true # remove if not wanted
-      - JANUS_HTTP_ADMIN=true
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    restart: always
+    command: --config /livekit.yaml --dev --node-ip 127.0.0.1
+    volumes:
+      - ./livekit.yaml:/livekit.yaml
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -62,12 +54,14 @@ services:
     healthcheck:
       test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
       start_period: 120s
-      start_interval: 1s
-      interval: 600s
-      timeout: 10s
-      retries: 60
+      start_interval: 10s
+      interval: 180s
+      timeout: 20s
+      retries: 3
 
   redis:
+    profiles:
+      - extras
     image: redis:alpine
     command:
       - /usr/local/etc/redis/redis.conf
@@ -94,13 +88,13 @@ services:
       - 9556:9556
 
   controller-ee:
-    image: git.opentalk.dev:5050/opentalk/backend/services/controller-enterprise:latest
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller-enterprise-canary:dev
     profiles:
       - backend-ee
     volumes:
       - ./controller/config.toml:/controller/config.toml
     environment:
-      - RUST_LOG=info
+      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
@@ -108,12 +102,9 @@ services:
     network_mode: host
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
         restart: true
-      janus:
-        condition: service_started
-        restart: true
-      redis:
+      livekit:
         condition: service_started
         restart: true
       keycloak:
@@ -127,7 +118,7 @@ services:
     volumes:
       - ./controller/config.toml:/controller/config.toml
     environment:
-      - RUST_LOG=info
+      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
@@ -135,12 +126,9 @@ services:
     network_mode: host
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
         restart: true
-      janus:
-        condition: service_started
-        restart: true
-      redis:
+      livekit:
         condition: service_started
         restart: true
       keycloak:
@@ -198,12 +186,13 @@ services:
       - :8080
 
   frontend:
-    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:latest
+    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:profiling
     profiles:
       - frontend
     ports:
       - 3000:80
     environment:
+      - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
       - BASE_URL=http://localhost:3000
       - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
@@ -306,19 +295,31 @@ services:
         User-Agent: curl/8.8.0
         Accept: */*
         " >&3 && head -6 <&3 | grep 'UP'
-      interval: 5s
-      timeout: 120s
-      retries: 10
+      start_period: 180s
+      start_interval: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
 
   recorder:
     image: git.opentalk.dev:5050/opentalk/backend/services/recorder:dev
+    restart: always
     profiles:
       - recorder
     volumes:
       - ./recorder/config.toml:/recorder/config.toml
     environment:
-      - RUST_LOG=info
+      RUST_LOG: debug,k3k=debug,ezk=debug
+      RUST_BACKTRACE: full
+      GST_DEBUG: 3
     network_mode: host
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   jaeger:
     image: quay.io/jaegertracing/all-in-one:1
