@@ -1,4 +1,6 @@
 minio/
 pg_data/
 nextcloud/
-.DS_Store
+
+# please add you personal setup to the
+# global git config at ~/.config/git/ignore
