@@ -45,7 +45,7 @@ services:
       - ./livekit.yaml:/livekit.yaml
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4-management
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
     ports:
