@@ -24,6 +24,9 @@ You might need to restart Janus with `docker compose restart janus` because dock
   - controller-ee
 - recorder
   - recorder
+- mailer
+  - smtp-mailer
+  - mailcrab
 - sharedfolder
   - nextcloud
 - spacedeck 
@@ -144,5 +147,15 @@ Run nextcloud container with:
 
 ```shell
 docker compose --profile sharedfolder up
+```
+
+## Mailer
+
+The `mailer` profile starts the SMTP Mailer and a MailCrab server. The SMTP Mailer connects to RabbitMQ from the testing environment by default and has MailCrab configured as the SMTP server. MailCrab exposes a web interface on port `1080` by default, where you can access the mails sent by the SMTP Mailer.
+
+Run mailer profile with:
+
+```shell
+docker compose --profile mailer up
 ```
 
