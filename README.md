@@ -46,6 +46,7 @@ The following web frontends are started depending on the selected profiles:
 - etherpad
   - etherpad
 - metrics
+  - jaeger
   - prometheus
   - grafana
   - node-exporter
