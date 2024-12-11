@@ -25,7 +25,6 @@ The following web frontends are started depending on the selected profiles:
   - rabbitmq
   - janus
   - keycloak
-  - redis
   - minio
   - turn
 - frontend
@@ -54,6 +53,9 @@ The following web frontends are started depending on the selected profiles:
 - mailer
   - smtp-mailer
   - mailcrab
+- extras
+  - redis
+  - ndt
 
 ## User
 
