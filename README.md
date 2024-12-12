@@ -6,6 +6,18 @@ Just a simple `docker compose up -d` away. This will start all the base componen
 
 You might need to restart Janus with `docker compose restart janus` because docker compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
 
+## Web Frontends
+
+The following web frontends are started depending on the selected profiles:
+
+* [OpenTalk Dashboard](http://localhost:3000) (profile: `frontend`)
+* [Jaeger UI](http://localhost:16686) (profile: `metrics`)
+* [Grafana](http://localhost:9000) (profile: `metrics`)
+* [Keycloak Admin Console](http://localhost:8080/auth)
+* [RabbitMq](http://localhost:8280)
+* [NextCloud](http://localhost:9002) (profile: `sharedfolder`)
+* [Email Dashboard](http://localhost:1080) (profile: `mailer`)
+
 ## Profiles
 
 - no profile(always enabled)
@@ -13,7 +25,6 @@ You might need to restart Janus with `docker compose restart janus` because dock
   - rabbitmq
   - janus
   - keycloak
-  - redis
   - minio
   - turn
 - frontend
@@ -29,15 +40,22 @@ You might need to restart Janus with `docker compose restart janus` because dock
   - mailcrab
 - sharedfolder
   - nextcloud
-- spacedeck 
+- spacedeck
   - spacedeck
 - etherpad
   - etherpad
 - metrics
+  - jaeger
   - prometheus
   - grafana
   - node-exporter
   - redis-exporter
+- mailer
+  - smtp-mailer
+  - mailcrab
+- extras
+  - redis
+  - ndt
 
 ## User
 
@@ -141,7 +159,7 @@ The MinIO `ACCESS_KEY` and `SECRET_KEY` have the value `minioadmin` pre-configur
 
 Will start a nextcloud behind an apache, available on the host on port 9002. Uses the example credentials from the
 example `controller.toml`(exampleuser:v3rys3cr3t). The container creates a `nextcloud` folder, in which the data from
-the nextcloud is stored. 
+the nextcloud is stored.
 
 Run nextcloud container with:
 
