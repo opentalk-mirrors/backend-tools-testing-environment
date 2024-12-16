@@ -61,14 +61,14 @@ The following web frontends are started depending on the selected profiles:
 
 There are multiple users created by default.
 
-| First name | Last name | Login   | Email               | Password  |
-| ---------- | --------- | ------- | ------------------- | --------- |
-| first      | last      | test    | foo@example.com     | `test`    |
-| Alice      | Adams     | alice   | alice@example.com   | `alice`   |
-| Bob        | Burton    | bob     | bob@example.com     | `bob`     |
-| Charlie    | Cooper    | charlie | charlie@example.com | `charlie` |
-| Dave       | Dunn      | dave    | dave@example.com    | `dave`    |
-| Erin       | Eaton     | erin    | erin@example.com    | `erin`    |
+| First name | Last name | Login   | Email               | Password   |
+| ---------- | --------- | ------- | ------------------- | ---------- |
+| first      | last      | test    | foo@example.com     | `testtest` |
+| Alice      | Adams     | alice   | alice@example.com   | `alice`    |
+| Bob        | Burton    | bob     | bob@example.com     | `bob`      |
+| Charlie    | Cooper    | charlie | charlie@example.com | `charlie`  |
+| Dave       | Dunn      | dave    | dave@example.com    | `dave`     |
+| Erin       | Eaton     | erin    | erin@example.com    | `erin`     |
 
 ## Controller
 
