@@ -261,7 +261,7 @@ services:
       - 9002:80
 
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0
+    image: quay.io/keycloak/keycloak:26.1
     restart: always
     command:
       - start-dev
@@ -287,7 +287,7 @@ services:
           Host: localhost:9000
           User-Agent: curl/8.8.0
           Accept: */*
-          " >&3 && head -6 <&3 | grep 'UP'
+          " >&3 && head -7 <&3 | grep 'UP'
       start_period: 180s
       start_interval: 5s
       interval: 10s
