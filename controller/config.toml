@@ -33,6 +33,8 @@ url = "postgres://postgres:password123@localhost:5432/opentalk"
 #max_connections = 100
 
 [http]
+addr = "localhost"
+
 # The port to bind the HTTP Server to (defaults to 11311).
 port = 8000
 # URLs that requests are allowed from. Leave empty to allow all.
@@ -188,10 +190,6 @@ secret_key = "minioadmin"
 #[spacedeck]
 #url = "http://localhost:9666"
 #api_key = "secret"
-
-# Reports configuration
-[reports]
-url = "http://localhost:6560"
 
 # Shared folder configuration
 [shared_folder]

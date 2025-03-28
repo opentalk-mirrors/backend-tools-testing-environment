@@ -135,15 +135,6 @@ services:
         condition: service_healthy
         restart: true
 
-  terdoc:
-    image: git.opentalk.dev:5050/opentalk/backend/services/terdoc:latest
-    profiles:
-      - backend
-      - report
-    ports:
-      - 6560:6560
-    command: [-vv]
-
   etherpad:
     image: git.opentalk.dev:5050/opentalk/backend/containers/etherpad:latest
     profiles:
