@@ -32,14 +32,60 @@ url = "postgres://postgres:password123@localhost:5432/opentalk"
 # Defaults to 100 which is the default of postgres.
 #max_connections = 100
 
+#[monitoring]
+#addr = "0.0.0.0"
+#port = 11411
+
 [http]
+# An optional address to which to bind.
+# Can be either a hostname, or an IP address.
+#
+# By default, this will accept requests on both the IPv4 and IPv6 interfaces on any address.
+#
+# The exception to this rule is "::0" which will bind to both the IPv4 and the
+# IPv6 UNSPECIFIED address, accepting requests on both of them. If the operating
+# system provides no IPv6 support, or the service should not bind to an IPv6
+# interface, "0.0.0.0" can be used instead, which will only bind to the IPv4
+# UNSPECIFIED address.
+#addr = "::0"
+#
+# A hostname or fully qualified domain name will bind to whatever the name
+# resolution returns, either one or both IP protocols.
+#addr = "controller.opentalk.example.com"
+#addr = "localhost"
+#addr = "opentalkserver"
+#
+# An explicit IPv4 or IPv6 address, will bind to the corresponding IP protocol.
+#addr = "127.0.0.1"
+#addr = "::1"
+#addr = "192.0.2.0"
+#addr = "2001:0DB8::1337:DEAD:CAFE"
+addr = "localhost"
+
 # The port to bind the HTTP Server to (defaults to 11311).
 port = 8000
-# URLs that requests are allowed from. Leave empty to allow all.
-cors.allowed_origin = ["http://localhost:3000"]
 
-# Settings for the keycloak which is the user provider
-# and allows authentication via OIDC
+# Settings for the keycloak which is the user provider and allows authentication via OIDC.
+# This is deprecated, replace with [oidc] and [user_search] sections.
+#[keycloak]
+# URL to the keycloak
+#base_url = "http://example.com/auth"
+# Name of the keycloak realm
+#realm = "MyRealm"
+# Client ID
+#client_id = "Controller"
+# Client secret (application requires confidential client).
+#client_secret = "v3rys3cr3t"
+
+# Configure how Keycloak users resulting from a search and registered Opentalk users are assigned to each other
+# The following assignment strategies are available:
+#   - by Keycloak id (default): Keycloak users are assigned to Opentalk users using Keycloak's id field.
+#   - by user attribute: Keycloak must provide a user attribute holding the user IDs. The name of this user
+#                        attribute must be set here in external_id_user_attribute_name.
+#external_id_user_attribute_name = "my_user_attribute_name"
+
+# OIDC configuration.
+# Currently only Keycloak is supported. Full compliance with other OIDC providers is not guaranteed.
 [oidc]
 # Base url for the OIDC authority. Will be used for frontend and controller unless overwritten by
 # `oidc.frontend.authority` or `oidc.controller.authority`.
@@ -74,7 +120,7 @@ api_base_url = "http://localhost:8080/auth/realms/OPENTALK"
 
 # Client id that is used to authenticate against the user search API.
 # Optional, if not set, the value from `oidc.controller.client_id` is used.
-# client_id = "Controller"
+client_id = "Controller"
 
 # Client secret that is used to authenticate against the user search API.
 # Optional, if not set, the value from `oidc.controller.client_secret` is used.
@@ -87,18 +133,19 @@ api_base_url = "http://localhost:8080/auth/realms/OPENTALK"
 #                        attribute must be set here in external_id_user_attribute_name.
 #external_id_user_attribute_name = "my_user_attribute_name"
 
-# Set the behavior of the `/users/find` endpoint.
+# Set the behaviour of the `/users/find` endpoint.
 # This allows searching for users who have not yet logged into the controller.
 # You can choose where to search for users or disable the endpoint completely for performance or privacy reasons.
 # Possible values are "disabled", "from_database" and "from_user_search_backend".
 users_find_behavior = "from_database"
 
+# LiveKit WebRTC SFU
 [livekit]
-api_key = "devkey"
-api_secret = "secret"
 public_url = "http://localhost:7880"
 service_url = "http://localhost:7880"
 
+api_key = "devkey"
+api_secret = "secret"
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
 url = "amqp://guest:guest@localhost/%2F"
@@ -128,20 +175,6 @@ recording_task_queue = "opentalk_recorder"
 #
 # Redis URL used to connect the redis server
 #url = "redis://localhost:6379/"
-
-#[turn]
-# Lifetime of the generated credentials (in seconds)
-#lifetime = 86400
-
-#[[turn.servers]]
-# URIS of this Turn Server following rfc7065
-#uris = [
-#    "turn:127.0.0.1:3478?transport=udp",
-#    "turn:127.0.0.1:3478?transport=tcp",
-#    "turns:127.0.0.1:5349?transport=tcp"
-#]
-# The Pre Shared Key set with --static-auth-secret=...
-#pre_shared_key = "opentalk2"
 
 #[stun]
 #uris = ["stun:127.0.0.1:3478"]
@@ -178,7 +211,7 @@ secret_key = "minioadmin"
 # A list urls of a etcd cluster
 #urls = ["localhost:2379"]
 
-# The etherpad configuration for the protocol module
+# The etherpad configuration for the meeting-notes module
 #[etherpad]
 #url = "http://localhost:9001"
 # Etherpads api key
@@ -188,10 +221,6 @@ secret_key = "minioadmin"
 #[spacedeck]
 #url = "http://localhost:9666"
 #api_key = "secret"
-
-# Reports configuration
-[reports]
-url = "http://localhost:6560"
 
 # Shared folder configuration
 [shared_folder]
@@ -219,12 +248,13 @@ password = "v3rys3cr3t"
 
 # Settings for endpoints
 #[endpoints]
-# Disable the /users/find endpoint for performance or privacy reasons
+# Disable the /users/find endpoint for performance or privacy reasons.
+# This is deprecated, replace with `user_search.users_find_behavior`.
 #disable_users_find = false
 
-# Enable user-searching using keycloak's admin API
-# This allows for finding users which have not yet
-# logged into the controller
+# Enable user-searching using keycloak's admin API.
+# This allows for finding users which have not yet logged into the controller
+# This is deprecated, replace with `user_search.users_find_behavior`.
 #users_find_use_kc = false
 
 # Allow inviting any unchecked email address.
