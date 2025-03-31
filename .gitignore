@@ -1,6 +1,6 @@
-minio/
-pg_data/
-nextcloud/
+minio*
+pg_data*
+nextcloud*
 
 # please add you personal setup to the
 # global git config at ~/.config/git/ignore
