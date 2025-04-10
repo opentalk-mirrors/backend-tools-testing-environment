@@ -95,6 +95,7 @@ services:
       - ./controller/config.toml:/controller/config.toml
     environment:
       - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
@@ -119,6 +120,7 @@ services:
       - ./controller/config.toml:/controller/config.toml
     environment:
       - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
@@ -261,12 +263,13 @@ services:
       - 9002:80
 
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0
+    image: quay.io/keycloak/keycloak:26.1
     restart: always
     command:
       - start-dev
       - --import-realm
       - --health-enabled=true
+      - --tracing-enabled=true
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
@@ -275,6 +278,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       # KC_HOSTNAME: keycloak
       KC_HTTP_RELATIVE_PATH: /auth
+      KC_TRACING_ENDPOINT: http://jaeger:4317
     volumes:
       - ./keycloak:/opt/keycloak/data/import:Z
     ports:
@@ -287,7 +291,7 @@ services:
           Host: localhost:9000
           User-Agent: curl/8.8.0
           Accept: */*
-          " >&3 && head -6 <&3 | grep 'UP'
+          " >&3 && head -7 <&3 | grep 'UP'
       start_period: 180s
       start_interval: 5s
       interval: 10s
@@ -315,7 +319,7 @@ services:
         condition: service_healthy
 
   jaeger:
-    image: quay.io/jaegertracing/jaeger:2.4.0
+    image: quay.io/jaegertracing/jaeger:2.5.0
     profiles:
       - metrics
     ports:
