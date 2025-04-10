@@ -95,6 +95,7 @@ services:
       - ./controller/config.toml:/controller/config.toml
     environment:
       - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
@@ -119,6 +120,7 @@ services:
       - ./controller/config.toml:/controller/config.toml
     environment:
       - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
       # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
