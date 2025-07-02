@@ -1,3 +1,17 @@
+[frontend]
+# The base URL of the frontend.
+base_url = "http://localhost:3000"
+
+# Information regarding the operator that is responsible for user-facing communication and legal
+# disclosure.
+#[operator_information]
+# The URL where users can find the data protection or privacy policy.
+#data_protection_url = "https://example.com/data-protection"
+# The phone number users can call for support.
+#support_phone_number = "+493012345678"
+# The email address users can contact for support.
+#support_email_address = "support@example.com"
+
 [logging]
 # Default tracing directives that will always be applied after RUST_LOG's directives.
 # Each array entry may contain a single directive.
@@ -65,12 +79,12 @@ addr = "localhost"
 # The port to bind the HTTP Server to (defaults to 11311).
 port = 8000
 
-# Settings for the keycloak which is the user provider and allows authentication via OIDC.
+# Settings for the Keycloak which is the user provider and allows authentication via OIDC.
 # This is deprecated, replace with [oidc] and [user_search] sections.
 #[keycloak]
-# URL to the keycloak
+# URL to the Keycloak
 #base_url = "http://example.com/auth"
-# Name of the keycloak realm
+# Name of the Keycloak realm
 #realm = "MyRealm"
 # Client ID
 #client_id = "Controller"
@@ -124,7 +138,7 @@ client_id = "Controller"
 
 # Client secret that is used to authenticate against the user search API.
 # Optional, if not set, the value from `oidc.controller.client_secret` is used.
-# client_secret = "QKwu4cYmwisLOU2XyqrWOYEDnap6Nubv"
+#client_secret = "QKwu4cYmwisLOU2XyqrWOYEDnap6Nubv"
 
 # Configure how Keycloak users resulting from a search and registered Opentalk users are assigned to each other
 # The following assignment strategies are available:
@@ -133,7 +147,7 @@ client_id = "Controller"
 #                        attribute must be set here in external_id_user_attribute_name.
 #external_id_user_attribute_name = "my_user_attribute_name"
 
-# Set the behaviour of the `/users/find` endpoint.
+# Set the behavior of the `/users/find` endpoint.
 # This allows searching for users who have not yet logged into the controller.
 # You can choose where to search for users or disable the endpoint completely for performance or privacy reasons.
 # Possible values are "disabled", "from_database" and "from_user_search_backend".
@@ -146,6 +160,7 @@ service_url = "http://localhost:7880"
 
 api_key = "devkey"
 api_secret = "secret"
+
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
 url = "amqp://guest:guest@localhost/%2F"
@@ -175,9 +190,6 @@ recording_task_queue = "opentalk_recorder"
 #
 # Redis URL used to connect the redis server
 #url = "redis://localhost:6379/"
-
-#[stun]
-#uris = ["stun:127.0.0.1:3478"]
 
 #[authz]
 # Should the controller publish/receive ACL changes via RabbitMQ to/from other controllers
@@ -222,6 +234,10 @@ secret_key = "minioadmin"
 #url = "http://localhost:9666"
 #api_key = "secret"
 
+# Subroom audio whisper configuration
+#[subroom_audio]
+#enable_whisper = false
+
 # Shared folder configuration
 [shared_folder]
 provider = "nextcloud"
@@ -252,7 +268,7 @@ password = "v3rys3cr3t"
 # This is deprecated, replace with `user_search.users_find_behavior`.
 #disable_users_find = false
 
-# Enable user-searching using keycloak's admin API.
+# Enable user-searching using Keycloak's admin API.
 # This allows for finding users which have not yet logged into the controller
 # This is deprecated, replace with `user_search.users_find_behavior`.
 #users_find_use_kc = false
