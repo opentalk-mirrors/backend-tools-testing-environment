@@ -31,8 +31,6 @@ The following web frontends are started depending on the selected profiles:
   - web-app
 - backend
   - controller
-- backend-ee
-  - controller-ee
 - recorder
   - recorder
 - mailer
@@ -72,7 +70,7 @@ There are multiple users created by default.
 
 ## Controller
 
-You can run the latest controller using either the `backend` or `backend-ee` profile.
+You can run the latest controller using the `backend`  profile.
 Per default this uses the provided keycloak. You can set different settings using the env vars or by changing the config file `controller/config.toml`
 
 ## Frontend

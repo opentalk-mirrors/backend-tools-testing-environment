@@ -28,14 +28,6 @@ services:
       timeout: 5s
       retries: 3
 
-  turn:
-    image: coturn/coturn:latest
-    network_mode: host
-    command:
-      - --use-auth-secret
-      - --static-auth-secret=opentalk
-      - --realm=opentalk.dev
-
   livekit:
     image: livekit/livekit-server:v1.8
     network_mode: host
@@ -86,31 +78,6 @@ services:
     ports:
       - 9555:9555
       - 9556:9556
-
-  controller-ee:
-    image: git.opentalk.dev:5050/opentalk/backend/services/controller-enterprise-canary:dev
-    profiles:
-      - backend-ee
-    volumes:
-      - ./controller/config.toml:/controller/config.toml
-    environment:
-      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
-      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
-      # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
-      # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
-      # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
-      # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
-    network_mode: host
-    depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
-      livekit:
-        condition: service_started
-        restart: true
-      keycloak:
-        condition: service_healthy
-        restart: true
 
   controller:
     image: git.opentalk.dev:5050/opentalk/backend/services/controller:latest
