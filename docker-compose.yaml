@@ -28,14 +28,6 @@ services:
       timeout: 5s
       retries: 3
 
-  turn:
-    image: coturn/coturn:latest
-    network_mode: host
-    command:
-      - --use-auth-secret
-      - --static-auth-secret=opentalk
-      - --realm=opentalk.dev
-
   livekit:
     image: livekit/livekit-server:v1.8
     network_mode: host
