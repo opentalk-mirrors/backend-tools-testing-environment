@@ -319,7 +319,7 @@ services:
         condition: service_healthy
 
   jaeger:
-    image: quay.io/jaegertracing/jaeger:2.5.0
+    image: quay.io/jaegertracing/jaeger:2.8.0
     profiles:
       - metrics
     ports:
