@@ -80,7 +80,7 @@ services:
       - 9556:9556
 
   controller:
-    image: git.opentalk.dev:5050/opentalk/backend/services/controller:latest
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
     profiles:
       - backend
     volumes:
