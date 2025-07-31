@@ -130,7 +130,7 @@ client_secret = "QKwu4cYmwisLOU2XyqrWOYEDnap6Nubv"
 backend = "keycloak_webapi"
 
 # Base URL of the Keycloak web api.
-api_base_url = "http://localhost:8080/auth/realms/OPENTALK"
+api_base_url = "http://localhost:8080/auth/admin/realms/OPENTALK"
 
 # Client id that is used to authenticate against the user search API.
 # Optional, if not set, the value from `oidc.controller.client_id` is used.
@@ -263,7 +263,7 @@ password = "v3rys3cr3t"
 #disabled_features = ["core::call_in", "integration::outlook"]
 
 # Settings for endpoints
-#[endpoints]
+[endpoints]
 # Disable the /users/find endpoint for performance or privacy reasons.
 # This is deprecated, replace with `user_search.users_find_behavior`.
 #disable_users_find = false
@@ -275,7 +275,7 @@ password = "v3rys3cr3t"
 
 # Allow inviting any unchecked email address.
 # Not recommended without proper outgoing anti-spam protection
-#event_invite_external_email_address = false
+event_invite_external_email_address = true
 
 # Prohibit users from changing the display name (guests are always allowed to change it)
 #disallow_custom_display_name = false
