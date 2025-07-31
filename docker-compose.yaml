@@ -240,8 +240,8 @@ services:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
       KC_DB_USERNAME: postgres
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # KC_HOSTNAME: keycloak
       KC_HTTP_RELATIVE_PATH: /auth
       KC_TRACING_ENDPOINT: http://jaeger:4317
