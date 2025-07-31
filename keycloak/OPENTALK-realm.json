@@ -508,6 +508,12 @@
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-opentalk" ],
+    "clientRoles": {
+      "realm-management": [
+        "query-users",
+        "view-users"
+      ]
+    },
     "notBefore" : 0,
     "groups" : [ ]
   }, {
