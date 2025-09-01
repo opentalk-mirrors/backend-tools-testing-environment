@@ -259,8 +259,9 @@ password = "v3rys3cr3t"
 # Format: <module>::<feature>. A missing module defaults to "core".
 # Currently supported features:
 # - core::call_in
+# - core::guests_allowed
 # - integration::outlook
-#disabled_features = ["core::call_in", "integration::outlook"]
+#disabled_features = ["core::call_in", "core::guests_allowed", "integration::outlook"]
 
 # Settings for endpoints
 [endpoints]
