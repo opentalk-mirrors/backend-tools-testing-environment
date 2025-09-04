@@ -151,6 +151,8 @@ services:
       - frontend
     ports:
       - 127.0.0.1:3000:80
+    volumes:
+      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh
     environment:
       - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
