@@ -12,7 +12,7 @@ services:
       POSTGRES_PASSWORD: password123
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
     volumes:
       - ./pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -41,8 +41,8 @@ services:
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
     ports:
-      - 8280:15672
-      - 5672:5672
+      - 127.0.0.1:8280:15672
+      - 127.0.0.1:5672:5672
     healthcheck:
       test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
       start_period: 120s
@@ -60,7 +60,7 @@ services:
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
     ports:
-      - 6379:6379
+      - 127.0.0.1:6379:6379
 
   minio:
     image: minio/minio:latest
@@ -76,8 +76,8 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - 9555:9555
-      - 9556:9556
+      - 127.0.0.1:9555:9555
+      - 127.0.0.1:9556:9556
 
   controller:
     image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
@@ -118,7 +118,7 @@ services:
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=admin
     ports:
-      - 9001:9001
+      - 127.0.0.1:9001:9001
 
   ndt:
     image: measurementlab/ndt-server:latest
@@ -131,8 +131,8 @@ services:
     cap_drop:
       - ALL
     ports:
-      # - 10443:4443
-      - 10081:8080
+      # - 127.0.0.1:10443:4443
+      - 127.0.0.1:10081:8080
     command:
       # - -cert
       # - /certs/cert.pem
@@ -150,7 +150,7 @@ services:
     profiles:
       - frontend
     ports:
-      - 3000:80
+      - 127.0.0.1:3000:80
     environment:
       - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
@@ -164,7 +164,7 @@ services:
     profiles:
       - metrics
     ports:
-      - 9090:9090
+      - 127.0.0.1:9090:9090
     volumes:
       - rabbitmq-prometheus_prometheus:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -179,7 +179,7 @@ services:
       - --path.sysfs=/host/sys
       - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
     expose:
-      - 9100
+      - 127.0.0.1:9100
       # https://hub.docker.com/r/prom/node-exporter/tags
     volumes:
       - /proc:/host/proc:ro
@@ -199,7 +199,7 @@ services:
     profiles:
       - metrics
     ports:
-      - 9000:3000
+      - 127.0.0.1:9000:3000
     volumes:
       - rabbitmq-prometheus_grafana:/var/lib/grafana
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml
@@ -226,7 +226,7 @@ services:
       - NEXTCLOUD_ADMIN_USER=exampleuser
       - NEXTCLOUD_ADMIN_PASSWORD=v3rys3cr3t
     ports:
-      - 9002:80
+      - 127.0.0.1:9002:80
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.1
@@ -248,7 +248,7 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import:Z
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD-SHELL
@@ -289,9 +289,9 @@ services:
     profiles:
       - metrics
     ports:
-      - 16686:16686
-      - 4317:4317
-      - 4318:4318
+      - 127.0.0.1:16686:16686
+      - 127.0.0.1:4317:4317
+      - 127.0.0.1:4318:4318
 
   smtp-mailer:
     image: git.opentalk.dev:5050/opentalk/backend/services/smtp-mailer:dev
@@ -308,5 +308,5 @@ services:
     profiles:
       - mailer
     ports:
-      - 1080:1080
-      - 1025:1025
+      - 127.0.0.1:1080:1080
+      - 127.0.0.1:1025:1025
