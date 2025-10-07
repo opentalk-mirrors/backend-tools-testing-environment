@@ -988,12 +988,13 @@
       "/*"
     ],
     "webOrigins": [
-      "/*"
+      "/*",
+      "https://localhost:3001"
     ],
     "notBefore": 0,
     "bearerOnly": false,
     "consentRequired": false,
-    "standardFlowEnabled": false,
+    "standardFlowEnabled": true,
     "implicitFlowEnabled": false,
     "directAccessGrantsEnabled": true,
     "serviceAccountsEnabled": false,
