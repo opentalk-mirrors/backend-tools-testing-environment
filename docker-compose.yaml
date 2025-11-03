@@ -29,7 +29,7 @@ services:
       retries: 3
 
   livekit:
-    image: livekit/livekit-server:v1.8
+    image: livekit/livekit-server:v1.9
     network_mode: host
     restart: always
     command: --config /livekit.yaml --dev --node-ip 127.0.0.1
