@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "no-version-field": 0,
+    "service-image-require-explicit-tag": 0
+  },
+  "quiet": false,
+  "debug": false,
+  "exclude": [
+    "tests"
+  ]
+}

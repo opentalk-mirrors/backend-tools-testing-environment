@@ -5,7 +5,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: registry.heinlein.group/opentalk/postgres:16
     environment:
       POSTGRES_DB: opentalk
       POSTGRES_USER: postgres
@@ -29,15 +29,16 @@ services:
       retries: 3
 
   livekit:
-    image: livekit/livekit-server:v1.9
+    image: registry.heinlein.group/opentalk/livekit-server:1.9
     network_mode: host
     restart: always
-    command: --config /livekit.yaml --dev --node-ip 127.0.0.1
+    command: --config /livekit.yaml --dev
     volumes:
       - ./livekit.yaml:/livekit.yaml
 
   rabbitmq:
-    image: rabbitmq:4-management
+    image: registry.heinlein.group/opentalk/rabbitmq:4.2
+    # image: rabbitmq:4-management
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
     ports:
@@ -54,7 +55,7 @@ services:
   redis:
     profiles:
       - extras
-    image: redis:alpine
+    image: registry.heinlein.group/opentalk/redis:8.2
     command:
       - /usr/local/etc/redis/redis.conf
     volumes:
@@ -63,7 +64,7 @@ services:
       - 127.0.0.1:6379:6379
 
   minio:
-    image: minio/minio:latest
+    image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
     volumes:
       - ./minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data
     entrypoint: ''
@@ -231,7 +232,7 @@ services:
       - 127.0.0.1:9002:80
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1
+    image: registry.heinlein.group/opentalk/keycloak:26.4
     restart: always
     command:
       - start-dev
@@ -252,19 +253,17 @@ services:
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test:
-        - CMD-SHELL
-        - |
-          exec 3<>/dev/tcp/127.0.0.1/9000 && echo "GET /auth/health/ready HTTP/1.1
-          Host: localhost:9000
-          User-Agent: curl/8.8.0
-          Accept: */*
-          " >&3 && head -7 <&3 | grep 'UP'
-      start_period: 180s
-      start_interval: 5s
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      test: [
+        CMD-SHELL,
+        'exec 3<>/dev/tcp/localhost/9000; \
+        echo -en "GET /health/ready" >&3; \
+        # Give the server a moment to respond, then search for "UP"
+        if timeout 3 cat <&3 | grep -m 1 "UP"; then \
+          exec 3<&-; exec 3>&-; exit 0; \
+        else \
+          exec 3<&-; exec 3>&-; exit 1; \
+        fi'
+      ]
     depends_on:
       postgres:
         condition: service_healthy
