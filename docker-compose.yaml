@@ -253,17 +253,17 @@ services:
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
-      test: [
-        CMD-SHELL,
-        'exec 3<>/dev/tcp/localhost/9000; \
-        echo -en "GET /health/ready" >&3; \
-        # Give the server a moment to respond, then search for "UP"
-        if timeout 3 cat <&3 | grep -m 1 "UP"; then \
-          exec 3<&-; exec 3>&-; exit 0; \
-        else \
-          exec 3<&-; exec 3>&-; exit 1; \
-        fi'
-      ]
+      test:
+        - CMD-SHELL
+        - >
+          exec 3<>/dev/tcp/localhost/9000 &&
+          { printf 'HEAD /auth/health/ready HTTP/1.0\r\n\r\n'; } >&3
+          && head -7 <&3 | grep -m 1 'HTTP/1.0 200'
+      start_period: 180s
+      start_interval: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 3
     depends_on:
       postgres:
         condition: service_healthy
