@@ -182,7 +182,7 @@ services:
       - --path.sysfs=/host/sys
       - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
     expose:
-      - 127.0.0.1:9100
+      - 9100
       # https://hub.docker.com/r/prom/node-exporter/tags
     volumes:
       - /proc:/host/proc:ro
