@@ -121,6 +121,20 @@ services:
     ports:
       - 127.0.0.1:9001:9001
 
+  spacedeck:
+    image: git.opentalk.dev:5050/opentalk/backend/containers/spacedeck:dev
+    profiles:
+      - spacedeck
+    restart: always
+    environment:
+      SD_HOST: 0.0.0.0
+      SD_PORT: 9666
+      SD_ENDPOINT: http://localhost:9666
+      SD_API_TOKEN: noop2zu3OovooXeeb8theesi
+      SD_INVITE_CODE: aiphivee0soo2ieS5duH8bei
+    ports:
+      - 127.0.0.1:9666:9666
+
   ndt:
     image: measurementlab/ndt-server:latest
     profiles:

@@ -230,9 +230,9 @@ secret_key = "minioadmin"
 #api_key = "secret"
 
 # Spacedeck configuration
-#[spacedeck]
-#url = "http://localhost:9666"
-#api_key = "secret"
+[spacedeck]
+url = "http://localhost:9666"
+api_key = "noop2zu3OovooXeeb8theesi"
 
 # Subroom audio whisper configuration
 #[subroom_audio]
