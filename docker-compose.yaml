@@ -5,7 +5,7 @@ volumes:
 
 services:
   postgres:
-    image: registry.heinlein.group/opentalk/postgres:16
+    image: registry.heinlein.group/opentalk/postgres:v17
     environment:
       POSTGRES_DB: opentalk
       POSTGRES_USER: postgres
