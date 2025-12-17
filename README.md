@@ -42,6 +42,8 @@ The following web frontends are started depending on the selected profiles:
   - spacedeck
 - etherpad
   - etherpad
+- spacedeck
+  - spacedeck
 - metrics
   - jaeger
   - prometheus
