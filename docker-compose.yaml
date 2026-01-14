@@ -55,7 +55,7 @@ services:
   redis:
     profiles:
       - extras
-    image: registry.heinlein.group/opentalk/redis:8.2
+    image: registry.heinlein.group/opentalk/redis:v8.4
     command:
       - /usr/local/etc/redis/redis.conf
     volumes:
