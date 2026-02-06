@@ -39,6 +39,12 @@ scrape_configs:
   - job_name: controller
     static_configs:
       - targets: [172.17.0.1:8000]
+  - job_name: roomserver
+    static_configs:
+      - targets: [172.17.0.1:11412]
+        labels:
+          app: roomserver
+
   # - job_name: rabbitmq-exporter
   #   scrape_interval: 60s
   #   scrape_timeout: 59s
