@@ -14,8 +14,8 @@ services:
     ports:
       - 127.0.0.1:5432:5432
     volumes:
-      - ./pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data:Z
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     command:
       - postgres
       - -c
@@ -34,7 +34,7 @@ services:
     restart: always
     command: --config /livekit.yaml --dev
     volumes:
-      - ./livekit.yaml:/livekit.yaml
+      - ./livekit.yaml:/livekit.yaml:Z
 
   rabbitmq:
     image: registry.heinlein.group/opentalk/rabbitmq:4.2
@@ -66,7 +66,7 @@ services:
   minio:
     image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
     volumes:
-      - ./minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data
+      - ./minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data:Z
     entrypoint: ''
     command: >
       sh -c '
@@ -85,7 +85,7 @@ services:
     profiles:
       - backend
     volumes:
-      - ./controller/config.toml:/controller/config.toml
+      - ./controller/config.toml:/controller/config.toml:Z
     environment:
       - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
       # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
@@ -140,9 +140,9 @@ services:
     profiles:
       - extras
     volumes:
-      # - ./ndt/certs:/certs
-      # - ./ndt/html:/html
-      - ./ndt/datadir:/datadir
+      # - ./ndt/certs:/certs:Z
+      # - ./ndt/html:/html:Z
+      - ./ndt/datadir:/datadir:Z
     cap_drop:
       - ALL
     ports:
@@ -167,7 +167,7 @@ services:
     ports:
       - 127.0.0.1:3000:80
     volumes:
-      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh
+      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh:Z
     environment:
       - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
@@ -183,8 +183,8 @@ services:
     ports:
       - 127.0.0.1:9090:9090
     volumes:
-      - rabbitmq-prometheus_prometheus:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - rabbitmq-prometheus_prometheus:/prometheus:Z
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:Z
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -218,10 +218,10 @@ services:
     ports:
       - 127.0.0.1:9000:3000
     volumes:
-      - rabbitmq-prometheus_grafana:/var/lib/grafana
-      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml
-      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml
-      - ./grafana/dashboards:/dashboards
+      - rabbitmq-prometheus_grafana:/var/lib/grafana:Z
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/rabbitmq.yaml:Z
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yaml:Z
+      - ./grafana/dashboards:/dashboards:Z
     environment:
       # https://grafana.com/plugins/flant-statusmap-panel
       # https://grafana.com/plugins/grafana-piechart-panel
@@ -237,7 +237,7 @@ services:
     profiles:
       - sharedfolder
     volumes:
-      - ./nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html
+      - ./nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html:Z
     environment:
       - SQLITE_DATABASE=nextcloud
       - NEXTCLOUD_ADMIN_USER=exampleuser
@@ -289,7 +289,7 @@ services:
     profiles:
       - recorder
     volumes:
-      - ./recorder/config.toml:/recorder/config.toml
+      - ./recorder/config.toml:/recorder/config.toml:Z
     environment:
       RUST_LOG: debug,k3k=debug,ezk=debug
       RUST_BACKTRACE: full
@@ -313,7 +313,7 @@ services:
     profiles:
       - mailer
     volumes:
-      - ./smtp-mailer/config.toml:/opt/smtp-mailer/config.toml
+      - ./smtp-mailer/config.toml:/opt/smtp-mailer/config.toml:Z
     depends_on:
       rabbitmq:
         condition: service_healthy
