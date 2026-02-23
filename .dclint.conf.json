@@ -1,7 +1,8 @@
 {
   "rules": {
     "no-version-field": 0,
-    "service-image-require-explicit-tag": 0
+    "service-image-require-explicit-tag": 0,
+    "no-duplicate-exported-ports": 0
   },
   "quiet": false,
   "debug": false,
