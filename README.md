@@ -6,6 +6,10 @@ Just a simple `docker compose up -d` away. This will start all the base componen
 
 You might need to restart Janus with `docker compose restart janus` because docker compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
 
+## Mac compatability
+
+Since on non Linux OSs Docker is run in a virtual machine, you cant use the `network_mode=host`. The [`add_mac_configurations`](https://git.opentalk.dev/opentalk/backend/tools/testing-environment/-/tree/add_mac_configurations) branch contains the required adjustments to use the testing environment under MacOS(and probably Windows).
+
 ## Web Frontends
 
 The following web frontends are started depending on the selected profiles:
