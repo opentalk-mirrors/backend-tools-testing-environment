@@ -119,6 +119,7 @@ services:
       - BASE_URL=http://localhost:3000
       - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
       - INSECURE=true
+      - LIVEKIT_PREFERRED_VIDEO_CODEC=vp9
 
   controller-roomserver:
     image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
@@ -227,6 +228,7 @@ services:
       - BASE_URL=http://localhost:3000
       - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
       - INSECURE=true
+      - LIVEKIT_PREFERRED_VIDEO_CODEC=vp9
 
   prometheus:
     # https://hub.docker.com/r/prom/prometheus/tags
