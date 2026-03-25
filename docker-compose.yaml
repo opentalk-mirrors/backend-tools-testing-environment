@@ -270,6 +270,7 @@ services:
     profiles:
       - metrics
     environment:
+      - REDIS_ADDR=redis://redis:6379
       - REDIS_EXPORTER_COUNT_KEYS=opentalk-signaling:runner:*,opentalk-signaling:room=*:participant=*:namespace=media:state
 
   grafana:
