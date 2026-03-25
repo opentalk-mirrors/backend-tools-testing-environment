@@ -41,6 +41,8 @@ services:
     # image: rabbitmq:4-management
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:Z
     ports:
       - 127.0.0.1:8280:15672
       - 127.0.0.1:5672:5672
