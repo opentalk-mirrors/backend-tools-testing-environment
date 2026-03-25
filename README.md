@@ -33,13 +33,15 @@ The following web frontends are started depending on the selected profiles:
   - turn
 - frontend
   - web-app
+- frontend-roomserver
+  - web-app (roomserver version)
 - backend
   - controller
 - recorder
   - recorder
-- mailer
-  - smtp-mailer
-  - mailcrab
+- roomserver
+  - roomserver
+  - controller-roomserver (controller with roomserver enables)
 - sharedfolder
   - nextcloud
 - spacedeck
