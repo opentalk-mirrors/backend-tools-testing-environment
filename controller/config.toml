@@ -74,7 +74,8 @@ url = "postgres://postgres:password123@localhost:5432/opentalk"
 #addr = "::1"
 #addr = "192.0.2.0"
 #addr = "2001:0DB8::1337:DEAD:CAFE"
-addr = "localhost"
+#addr = "localhost"
+addr = "0.0.0.0"
 
 # The port to bind the HTTP Server to (defaults to 11311).
 port = 8000
