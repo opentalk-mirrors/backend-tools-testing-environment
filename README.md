@@ -107,7 +107,7 @@ Password: guest
 
 Static Auth Secret: opentalk
 
-## Keycloack
+## Keycloak
 
 You can use the provided keycloak or use a central one.
 
