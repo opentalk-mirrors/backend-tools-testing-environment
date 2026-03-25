@@ -241,6 +241,8 @@ services:
     image: quay.io/prometheus/prometheus:latest
     profiles:
       - metrics
+    extra_hosts:
+      - host.docker.internal:host-gateway
     ports:
       - 127.0.0.1:9090:9090
     volumes:
