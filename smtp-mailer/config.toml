@@ -1,5 +1,7 @@
 [rabbit_mq]
 # The URL to use to connect to the rabbit mq broker
+# Uses docker service name because smtp-mailer runs in the Docker network
+# (unlike controller which uses network_mode: host and connects via localhost)
 url = "amqp://guest:guest@rabbitmq:5672/%2F"
 # The queue to subscribe to
 mail_task_queue = "opentalk_mailer"
