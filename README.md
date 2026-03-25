@@ -2,11 +2,12 @@
 
 Ready to run testing environments for opentalk-signaling and opentalk-controller
 
-Just a simple `docker compose up -d` away. This will start all the base componenets OpenTalk depends on(rabbitMQ, redis, keycloak, etc.). Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development. You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`. `docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
+Just a simple `docker compose up -d` away. This will start all the base components OpenTalk depends on(rabbitMQ, redis, keycloak, etc.).
+Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development.
+You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`.
+`docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
 
-You might need to restart Janus with `docker compose restart janus` because docker compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
-
-## Mac compatability
+## Mac compatibility
 
 Since on non Linux OSs Docker is run in a virtual machine, you cant use the `network_mode=host`. The [`add_mac_configurations`](https://git.opentalk.dev/opentalk/backend/tools/testing-environment/-/tree/add_mac_configurations) branch contains the required adjustments to use the testing environment under MacOS(and probably Windows).
 
@@ -27,27 +28,26 @@ The following web frontends are started depending on the selected profiles:
 - no profile(always enabled)
   - postgres
   - rabbitmq
-  - janus
+  - livekit
   - keycloak
   - minio
-  - turn
 - frontend
   - web-app
+- frontend-roomserver
+  - web-app (roomserver version)
 - backend
   - controller
 - recorder
   - recorder
-- mailer
-  - smtp-mailer
-  - mailcrab
+- roomserver
+  - roomserver
+  - controller-roomserver (controller with roomserver enables)
 - sharedfolder
   - nextcloud
 - spacedeck
   - spacedeck
 - etherpad
   - etherpad
-- spacedeck
-  - spacedeck
 - metrics
   - jaeger
   - prometheus
@@ -105,14 +105,15 @@ Password: guest
 
 Static Auth Secret: opentalk
 
-## Keycloack
+## Keycloak
 
 You can use the provided keycloak or use a central one.
 
 Admin User: admin
 Admin Password: admin
 
-A test user with credentials test and test is created upon start.
+The following users are created upon start (see [User](#user) section for details):
+test/testtest, alice/alice, bob/bob, charlie/charlie, dave/dave, erin/erin
 
 # Metrics
 

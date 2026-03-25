@@ -10,7 +10,6 @@ services:
       POSTGRES_DB: opentalk
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password123
-      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - 127.0.0.1:5432:5432
     volumes:
@@ -41,9 +40,13 @@ services:
     # image: rabbitmq:4-management
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:Z
     ports:
       - 127.0.0.1:8280:15672
       - 127.0.0.1:5672:5672
+    expose:
+      - 15692
     healthcheck:
       test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
       start_period: 120s
@@ -87,7 +90,7 @@ services:
     volumes:
       - ./controller/config.toml:/controller/config.toml:Z
     environment:
-      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
       # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
@@ -96,6 +99,9 @@ services:
     network_mode: host
     depends_on:
       postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
         condition: service_healthy
         restart: true
       livekit:
@@ -112,7 +118,7 @@ services:
     ports:
       - 127.0.0.1:3000:80
     volumes:
-      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh
+      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh:Z
     environment:
       - LIVEKIT_SERVER_URL=http://localhost:7880
       - CONTROLLER_HOST=localhost:8000
@@ -126,9 +132,9 @@ services:
     profiles:
       - roomserver
     volumes:
-      - ./controller/config-roomserver.toml:/controller/config.toml
+      - ./controller/config-roomserver.toml:/controller/config.toml:Z
     environment:
-      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
     network_mode: host
     depends_on:
       postgres:
@@ -146,7 +152,7 @@ services:
     profiles:
       - roomserver
     volumes:
-      - ./roomserver/roomserver.toml:/opentalk-roomserver/roomserver.toml
+      - ./roomserver/roomserver.toml:/opentalk-roomserver/roomserver.toml:Z
     environment:
       - RUST_LOG=opentalk=debug
     network_mode: host
@@ -235,6 +241,8 @@ services:
     image: quay.io/prometheus/prometheus:latest
     profiles:
       - metrics
+    extra_hosts:
+      - host.docker.internal:host-gateway
     ports:
       - 127.0.0.1:9090:9090
     volumes:
@@ -263,7 +271,8 @@ services:
     profiles:
       - metrics
     environment:
-      - REDIS_EXPORTER_COUNT_KEYS=opentalk-signaling:runner:*,opentalk-signaling:room=*:participant=*:namespace=media:state
+      - REDIS_ADDR=redis://redis:6379
+      - REDIS_EXPORTER_COUNT_KEYS=db0=opentalk-signaling:runner:*,db0=opentalk-signaling:room*participant*namespace*media*state
 
   grafana:
     # https://hub.docker.com/r/grafana/grafana/tags
@@ -314,6 +323,7 @@ services:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
       KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: password123
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # KC_HOSTNAME: keycloak
