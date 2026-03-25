@@ -44,6 +44,8 @@ services:
     ports:
       - 127.0.0.1:8280:15672
       - 127.0.0.1:5672:5672
+    expose:
+      - 15692
     healthcheck:
       test: [CMD, rabbitmq-diagnostics, check_port_connectivity]
       start_period: 120s
