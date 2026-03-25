@@ -4,7 +4,7 @@ Ready to run testing environments for opentalk-signaling and opentalk-controller
 
 Just a simple `docker compose up -d` away. This will start all the base componenets OpenTalk depends on(rabbitMQ, redis, keycloak, etc.). Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development. You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`. `docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
 
-You might need to restart Janus with `docker compose restart janus` because docker compose does not wait for rabbitmq to be fully booted before starting janus, janus just ignores rabbitmq if it can not connect.
+
 
 ## Mac compatability
 
@@ -27,10 +27,9 @@ The following web frontends are started depending on the selected profiles:
 - no profile(always enabled)
   - postgres
   - rabbitmq
-  - janus
+  - livekit
   - keycloak
   - minio
-  - turn
 - frontend
   - web-app
 - frontend-roomserver
