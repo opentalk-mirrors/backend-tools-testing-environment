@@ -114,7 +114,8 @@ You can use the provided keycloak or use a central one.
 Admin User: admin
 Admin Password: admin
 
-A test user with credentials test and test is created upon start.
+The following users are created upon start (see [User](#user) section for details):
+test/testtest, alice/alice, bob/bob, charlie/charlie, dave/dave, erin/erin
 
 # Metrics
 
