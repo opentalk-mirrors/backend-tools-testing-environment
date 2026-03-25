@@ -272,7 +272,7 @@ services:
       - metrics
     environment:
       - REDIS_ADDR=redis://redis:6379
-      - REDIS_EXPORTER_COUNT_KEYS=opentalk-signaling:runner:*,opentalk-signaling:room=*:participant=*:namespace=media:state
+      - REDIS_EXPORTER_COUNT_KEYS=db0=opentalk-signaling:runner:*,db0=opentalk-signaling:room*participant*namespace*media*state
 
   grafana:
     # https://hub.docker.com/r/grafana/grafana/tags
