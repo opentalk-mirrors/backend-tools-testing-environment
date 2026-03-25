@@ -2,11 +2,12 @@
 
 Ready to run testing environments for opentalk-signaling and opentalk-controller
 
-Just a simple `docker compose up -d` away. This will start all the base componenets OpenTalk depends on(rabbitMQ, redis, keycloak, etc.). Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development. You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`. `docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
+Just a simple `docker compose up -d` away. This will start all the base components OpenTalk depends on(rabbitMQ, redis, keycloak, etc.).
+Next to that there are profiles to start the rest of the components of OpenTalk as you need them for development.
+You can add them with the `--profile` option, so for example to run the base components and the controller simply run `docker compose --profile backend up`.
+`docker compose --profile backend --profile frontend up` will give you a full base deployment with frontend and backend.
 
-
-
-## Mac compatability
+## Mac compatibility
 
 Since on non Linux OSs Docker is run in a virtual machine, you cant use the `network_mode=host`. The [`add_mac_configurations`](https://git.opentalk.dev/opentalk/backend/tools/testing-environment/-/tree/add_mac_configurations) branch contains the required adjustments to use the testing environment under MacOS(and probably Windows).
 
