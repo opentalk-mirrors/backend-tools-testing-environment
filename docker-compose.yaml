@@ -87,7 +87,7 @@ services:
     volumes:
       - ./controller/config.toml:/controller/config.toml:Z
     environment:
-      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
       # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
       # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
       # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
@@ -128,7 +128,7 @@ services:
     volumes:
       - ./controller/config-roomserver.toml:/controller/config.toml
     environment:
-      - RUST_LOG=debug,rusttls=info,tokio_tungstenite=info,tungstenite=info
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
     network_mode: host
     depends_on:
       postgres:
