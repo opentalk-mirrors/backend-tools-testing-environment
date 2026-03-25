@@ -98,6 +98,9 @@ services:
       postgres:
         condition: service_healthy
         restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
       livekit:
         condition: service_started
         restart: true
