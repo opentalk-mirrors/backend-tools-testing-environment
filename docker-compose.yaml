@@ -66,6 +66,20 @@ services:
     ports:
       - 127.0.0.1:6379:6379
 
+  redisinsight:
+    image: redis/redisinsight
+    profiles:
+      - extras
+    environment:
+      - RI_ACCEPT_TERMS_AND_CONDITIONS=true
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
+      - RI_REDIS_ALIAS=redis
+    ports:
+      - 127.0.0.1:5540:5540
+    depends_on:
+      - redis
+
   minio:
     image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
     volumes:

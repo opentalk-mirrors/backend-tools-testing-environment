@@ -22,6 +22,7 @@ The following web frontends are started depending on the selected profiles:
 * [RabbitMq](http://localhost:8280)
 * [NextCloud](http://localhost:9002) (profile: `sharedfolder`)
 * [Email Dashboard](http://localhost:1080) (profile: `mailer`)
+* [RedisInsight](http://localhost:5540) (profile: `extras`)
 
 ## Profiles
 
@@ -59,6 +60,7 @@ The following web frontends are started depending on the selected profiles:
   - mailcrab
 - extras
   - redis
+  - redisinsight
   - ndt
 
 ## User
