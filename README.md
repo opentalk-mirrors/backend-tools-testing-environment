@@ -15,13 +15,15 @@ Since on non Linux OSs Docker is run in a virtual machine, you cant use the `net
 
 The following web frontends are started depending on the selected profiles:
 
-* [OpenTalk Dashboard](http://localhost:3000) (profile: `frontend`)
-* [Jaeger UI](http://localhost:16686) (profile: `metrics`)
-* [Grafana](http://localhost:9000) (profile: `metrics`)
-* [Keycloak Admin Console](http://localhost:8080/auth)
-* [RabbitMq](http://localhost:8280)
-* [NextCloud](http://localhost:9002) (profile: `sharedfolder`)
-* [Email Dashboard](http://localhost:1080) (profile: `mailer`)
+* [OpenTalk Dashboard](http://localhost:3000) (profile: `frontend`) — see [User](#user) section for credentials
+* [Jaeger UI](http://localhost:16686) (profile: `metrics`) — no login required
+* [Grafana](http://localhost:9000) (profile: `metrics`) — `admin:admin`
+* [Keycloak Admin Console](http://localhost:8080/auth) — `admin:admin`
+* [RabbitMQ Management](http://localhost:8280) — `guest:guest`
+* [MinIO Console](http://localhost:9556) — `minioadmin:minioadmin`
+* [NextCloud](http://localhost:9002) (profile: `sharedfolder`) — `exampleuser:v3rys3cr3t`
+* [Email Dashboard](http://localhost:1080) (profile: `mailer`) — no login required
+* [RedisInsight](http://localhost:5540) (profile: `extras`) — no login required
 
 ## Profiles
 
@@ -59,6 +61,7 @@ The following web frontends are started depending on the selected profiles:
   - mailcrab
 - extras
   - redis
+  - redisinsight
   - ndt
 
 ## User

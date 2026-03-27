@@ -42,6 +42,7 @@ services:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
     volumes:
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:Z
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:Z
     ports:
       - 127.0.0.1:8280:15672
       - 127.0.0.1:5672:5672
@@ -65,6 +66,20 @@ services:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:Z
     ports:
       - 127.0.0.1:6379:6379
+
+  redisinsight:
+    image: redis/redisinsight
+    profiles:
+      - extras
+    environment:
+      - RI_ACCEPT_TERMS_AND_CONDITIONS=true
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
+      - RI_REDIS_ALIAS=redis
+    ports:
+      - 127.0.0.1:5540:5540
+    depends_on:
+      - redis
 
   minio:
     image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
