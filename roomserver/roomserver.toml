@@ -61,7 +61,7 @@ api_key = { "id" = "controller", "secret" = "secret" }
 #allowlist = ["127.0.0.0/24", "::ffff:0:0/96"]
 
 # Allow access from localhost and docker network
-allowlist = ["127.0.0.0/24", "::ffff:0:0/96", "172.21.0.0/16"]
+allowlist = ["127.0.0.0/24", "::ffff:0:0/96", "172.0.0.0/8"]
 
 [tracing]
 # Tracing settings
