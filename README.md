@@ -39,11 +39,12 @@ The following web frontends are started depending on the selected profiles:
   - web-app (roomserver version)
 - backend
   - controller
+- backend-roomserver
+  - controller-roomserver (controller with roomserver enables)
 - recorder
   - recorder
 - roomserver
   - roomserver
-  - controller-roomserver (controller with roomserver enables)
 - sharedfolder
   - nextcloud
 - spacedeck

@@ -145,7 +145,7 @@ services:
   controller-roomserver:
     image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
     profiles:
-      - roomserver
+      - backend-roomserver
     volumes:
       - ./controller/config-roomserver.toml:/controller/config.toml:Z
     environment:
@@ -156,9 +156,6 @@ services:
         condition: service_healthy
         restart: true
       keycloak:
-        condition: service_healthy
-        restart: true
-      roomserver:
         condition: service_healthy
         restart: true
 
