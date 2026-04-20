@@ -80,6 +80,12 @@ addr = "0.0.0.0"
 # The port to bind the HTTP Server to (defaults to 11311).
 port = 8000
 
+# The configured API keys for the internal service APIs that are served by the controller
+#
+# These APIs are currently exclusively used by the roomserver.
+# When a roomserver is configured, this setting is mandatory.
+service_api_keys = [{ "id" = "controller", "secret" = "secret" }]
+
 # Settings for the Keycloak which is the user provider and allows authentication via OIDC.
 # This is deprecated, replace with [oidc] and [user_search] sections.
 #[keycloak]
@@ -179,6 +185,59 @@ recording_task_queue = "opentalk_recorder"
 
 # Maximum number of amqp channels per connection
 #max_channels_per_connection = 100
+
+[roomserver]
+# Configure a roomserver for this controller.
+#
+# When enabled, the controllers built in signaling endpoints (`rooms/<room-id>/start` & `rooms/<room-id>/start_invited`)
+# are be disabled and roomserver signaling endpoints (`rooms/roomserver/<room-id>/start` &
+# `rooms/roomserver/<room-id>/start_invited`) have to be used instead.
+#
+# The deployed frontend client has to be compatible with the roomservers signaling implementation.
+#
+# The URL of the roomserver. Needs to be reachable by clients
+url = "http://localhost:11333"
+#
+# The roomservers API key id and secret
+api_key = { id = "roomserver", secret = "secret" }
+
+# RoomServer websocket rate limiting configuration
+#
+# Rate limiting is enabled by default, to disable it, you have to set the `disabled` flag to `true`. A missing
+# configuration will fall back to the default values.
+#
+# The implementation uses the token bucket algorithm. Each websocket message that is sent by a participant consumes
+# one token. A websocket connection has a maximum amount of tokens that can be available at a time (the token bucket).
+# Each second, the bucket is filled with a configured amount of tokens.
+#
+# The algorithm allows the configuration to have a reasonably small amount of messages per second, while still
+# allowing 'bursts' of messages until the tokens in the bucket are fully consumed.
+#
+# A participant has to wait for new tokens when no tokens remain.
+#[roomserver.websocket_rate_limit]
+# Whether rate limiting will be disabled
+#disabled = false
+# The amount of messages that can be consistently sent by participants (defaults to 10)
+#tokens_per_second = 10
+# The maximum amount of tokens that can be held per websocket connection (defaults to 30)
+#token_bucket_size = 30
+
+#The Modules that are enabled in the roomserver
+[roomserver.modules]
+#[roomserver.modules.chat]
+#[roomserver.modules.chat.rate_limit]
+#tokens_per_second = 3
+#token_bucket_size = 10
+#slow_down_threshold = 0.8
+#[roomserver.modules.e2ee]
+#[roomserver.modules.livekit]
+#api_key = "devkey"
+#api_secret = "secret"
+#public_url = "http://localhost:7880"
+#service_url = "http://localhost:7880"
+#[roomserver.modules.echo]
+#[roomserver.modules.polls]
+#[roomserver.modules.timer]
 
 #[redis]
 # Configuration of a redis server which can be used for synchronizing multiple
