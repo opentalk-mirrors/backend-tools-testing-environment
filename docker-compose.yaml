@@ -359,7 +359,7 @@ services:
     profiles:
       - mailer
     volumes:
-      - ./smtp-mailer/config.toml:/opt/smtp-mailer/config.toml:Z
+      - ./smtp-mailer/smtp-mailer.toml:/opt/smtp-mailer/smtp-mailer.toml:Z
     depends_on:
       rabbitmq:
         condition: service_healthy
