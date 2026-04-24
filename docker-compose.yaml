@@ -126,43 +126,10 @@ services:
         condition: service_healthy
         restart: true
 
-  frontend-roomserver:
-    image: git.opentalk.dev:5050/opentalk/frontend/web/web-app:feature_roomserver
-    profiles:
-      - frontend-roomserver
-    ports:
-      - 127.0.0.1:3000:80
-    volumes:
-      - ./frontend/50-enable-cors.sh:/docker-entrypoint.d/50-enable-cors.sh:Z
-    environment:
-      - LIVEKIT_SERVER_URL=http://localhost:7880
-      - CONTROLLER_HOST=localhost:8000
-      - BASE_URL=http://localhost:3000
-      - OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
-      - INSECURE=true
-      - LIVEKIT_PREFERRED_VIDEO_CODEC=vp9
-
-  controller-roomserver:
-    image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
-    profiles:
-      - backend-roomserver
-    volumes:
-      - ./controller/config-roomserver.toml:/controller/config.toml:Z
-    environment:
-      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
-    network_mode: host
-    depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
-      keycloak:
-        condition: service_healthy
-        restart: true
-
   roomserver:
     image: git.opentalk.dev:5050/opentalk/backend/services/roomserver:dev
     profiles:
-      - roomserver
+      - backend
     volumes:
       - ./roomserver/roomserver.toml:/opentalk-roomserver/roomserver.toml:Z
     environment:
