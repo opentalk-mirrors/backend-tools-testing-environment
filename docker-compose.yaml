@@ -59,6 +59,7 @@ services:
   redis:
     profiles:
       - extras
+      - backend-lb
     image: registry.heinlein.group/opentalk/redis:v8.4
     command:
       - /usr/local/etc/redis/redis.conf
@@ -124,6 +125,79 @@ services:
         restart: true
       keycloak:
         condition: service_healthy
+        restart: true
+
+  controller-lb-1:
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
+    profiles:
+      - backend-lb
+    volumes:
+      - ./controller/config.toml:/controller/config.toml:Z
+    environment:
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
+      - OPENTALK_CTRL_HTTP__PORT=8002
+      - OPENTALK_CTRL_REDIS__URL=redis://localhost:6379/
+      - OPENTALK_CTRL_AUTHZ__SYNCHRONIZE_CONTROLLERS=true
+    network_mode: host
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+      livekit:
+        condition: service_started
+        restart: true
+      keycloak:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+
+  controller-lb-2:
+    image: git.opentalk.dev:5050/opentalk/backend/services/controller:dev
+    profiles:
+      - backend-lb
+    volumes:
+      - ./controller/config.toml:/controller/config.toml:Z
+    environment:
+      - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
+      - OPENTALK_CTRL_HTTP__PORT=8001
+      - OPENTALK_CTRL_REDIS__URL=redis://localhost:6379/
+      - OPENTALK_CTRL_AUTHZ__SYNCHRONIZE_CONTROLLERS=true
+    network_mode: host
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+      livekit:
+        condition: service_started
+        restart: true
+      keycloak:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+        restart: true
+
+  nginx:
+    image: nginx:1.29-alpine
+    profiles:
+      - backend-lb
+    volumes:
+      - ./nginx/controller-lb.conf:/etc/nginx/conf.d/default.conf:Z
+    network_mode: host
+    depends_on:
+      controller-lb-1:
+        condition: service_started
+        restart: true
+      controller-lb-2:
+        condition: service_started
         restart: true
 
   roomserver:
