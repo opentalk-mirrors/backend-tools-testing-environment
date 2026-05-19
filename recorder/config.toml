@@ -1,15 +1,9 @@
-[auth]
-issuer = "http://localhost:8080/auth/realms/OPENTALK"
-client_id = "Recorder"
-client_secret = "wcAlX5I26FdA76aJhFj9PyWd9LWNX9j0"
-
 [controller]
-domain = "localhost:8000"
-insecure = true
+url = "http://localhost:8000/"
+api_key = { "id" = "controller", "secret" = "secret" }
 
-[rabbitmq]
-uri = "amqp://guest:guest@localhost/%2F"
-queue = "opentalk_recorder"
+[http]
+api_keys = [{ "id" = "recorder", "secret" = "secret" }]
 
 [recorder]
 clock_format = "%d.%m.%y %X %Z"

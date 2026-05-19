@@ -230,6 +230,11 @@ base_url = "http://localhost:9001"
 [roomserver.modules.whiteboard]
 api_key = "noop2zu3OovooXeeb8theesi"
 base_url = "http://localhost:9666"
+[roomserver.modules.recording]
+api_key = { id = "recorder", secret = "secret" }
+record = true
+stream = true
+url = "http://localhost:11511"
 
 #[authz]
 # Should the controller publish/receive ACL changes via RabbitMQ to/from other controllers
