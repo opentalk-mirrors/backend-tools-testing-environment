@@ -36,7 +36,7 @@ services:
       - ./livekit.yaml:/livekit.yaml:Z
 
   rabbitmq:
-    image: registry.heinlein.group/opentalk/rabbitmq:4.2
+    image: registry.heinlein.group/opentalk/rabbitmq:v4.3
     # image: rabbitmq:4-management
     environment:
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log.console.level=debug
