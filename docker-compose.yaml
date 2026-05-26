@@ -60,7 +60,7 @@ services:
     profiles:
       - extras
       - backend-lb
-    image: registry.heinlein.group/opentalk/redis:v8.6
+    image: registry.heinlein.group/opentalk/redis:v8.8
     command:
       - /usr/local/etc/redis/redis.conf
     volumes:
