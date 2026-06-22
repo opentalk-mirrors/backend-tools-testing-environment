@@ -29,44 +29,44 @@ The following web frontends are started depending on the selected profiles:
 ## Profiles
 
 - no profile(always enabled)
-  - postgres
-  - rabbitmq
-  - livekit
-  - keycloak
-  - minio
+    - postgres
+    - rabbitmq
+    - livekit
+    - keycloak
+    - minio
 - frontend
-  - web-app
+    - web-app
 - frontend-roomserver
-  - web-app (roomserver version)
+    - web-app (roomserver version)
 - backend
-  - controller
+    - controller
 - backend-roomserver
-  - controller-roomserver (controller with roomserver enables)
+    - controller-roomserver (controller with roomserver enables)
 - recorder
-  - recorder
+    - recorder
 - roomserver
-  - roomserver
+    - roomserver
 - nextcloud
-  - nextcloud
+    - nextcloud
 - opencloud
-  - opencloud
+    - opencloud
 - spacedeck
-  - spacedeck
+    - spacedeck
 - etherpad
-  - etherpad
+    - etherpad
 - metrics
-  - jaeger
-  - prometheus
-  - grafana
-  - node-exporter
-  - redis-exporter
+    - jaeger
+    - prometheus
+    - grafana
+    - node-exporter
+    - redis-exporter
 - mailer
-  - smtp-mailer
-  - mailcrab
+    - smtp-mailer
+    - mailcrab
 - extras
-  - redis
-  - redisinsight
-  - ndt
+    - redis
+    - redisinsight
+    - ndt
 
 ## User
 
@@ -104,7 +104,7 @@ Create an access token for the `opentalk` package/container registry:
 
 ## Rabbit MQ
 
-ManagementURL: http://localhost:8280
+ManagementURL: <http://localhost:8280>
 Username: guest
 Password: guest
 
@@ -122,9 +122,10 @@ Admin Password: admin
 The following users are created upon start (see [User](#user) section for details):
 test/testtest, alice/alice, bob/bob, charlie/charlie, dave/dave, erin/erin
 
-# Metrics
+## Metrics
 
 To also start the metrics stuff run:
+
 ```shell
 docker compose --profile metrics up
 ```
@@ -137,7 +138,7 @@ Prometheus and Grafana and node-exporter
 HTTP Port: 9000
 User/Password: admin:admin
 
-# Postman
+## Postman
 
 1. Import the collection into Postman.
 2. Click onto the Controller collection, select the Authoritazion tab and scroll down to Get a new Access Token
@@ -165,7 +166,6 @@ database will result in an invalid state for all assets.
 A bucket with the name `controller` is created by default.
 
 The MinIO `ACCESS_KEY` and `SECRET_KEY` have the value `minioadmin` pre-configured (same as root user login).
-
 
 ## Nextcloud
 
