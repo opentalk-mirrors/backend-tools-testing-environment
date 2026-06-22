@@ -1,0 +1,8 @@
+---
+services:
+  controller:
+    environment:
+      - OPENTALK_CTRL_SHARED_FOLDER__PROVIDER=opencloud
+      - OPENTALK_CTRL_SHARED_FOLDER__URL=http://localhost:9003
+      - OPENTALK_CTRL_SHARED_FOLDER__USERNAME=admin
+      - OPENTALK_CTRL_SHARED_FOLDER__PASSWORD=admin

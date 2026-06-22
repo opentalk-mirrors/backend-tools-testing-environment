@@ -1,6 +1,7 @@
 minio*
 pg_data*
 nextcloud*
+opencloud*
 
 # please add you personal setup to the
 # global git config at ~/.config/git/ignore

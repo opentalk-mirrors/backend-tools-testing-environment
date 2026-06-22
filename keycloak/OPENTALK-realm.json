@@ -53,6 +53,14 @@
       "containerId" : "6a077072-0143-4fc8-a191-5c2a6c263b7c",
       "attributes" : { }
     }, {
+      "id" : "f1e2d3c4-b5a6-4789-9012-3456789abcde",
+      "name" : "OpenCloud",
+      "description" : "Grants access to OpenCloud",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "6a077072-0143-4fc8-a191-5c2a6c263b7c",
+      "attributes" : { }
+    }, {
       "id" : "d0bf644a-d260-430e-aa1c-95e84211e536",
       "name" : "offline_access",
       "description" : "${role_offline-access}",
@@ -401,7 +409,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -424,7 +432,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -447,7 +455,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -470,7 +478,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -493,7 +501,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   }, {
@@ -550,7 +558,7 @@
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
-    "realmRoles" : [ "default-roles-opentalk" ],
+    "realmRoles" : [ "default-roles-opentalk", "OpenCloud" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ],
@@ -711,6 +719,60 @@
       }
     } ],
     "defaultClientScopes" : [ "web-origins", "acr", "Groups", "profile", "roles", "email" ],
+    "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
+  }, {
+    "id" : "0a9b1f3c-2d4e-4f6a-8b0c-1d2e3f4a5b6c",
+    "clientId" : "OpenCloud",
+    "name" : "OpenCloud",
+    "description" : "OpenCloud web client (authorization code flow with PKCE)",
+    "rootUrl" : "http://localhost:9003",
+    "adminUrl" : "",
+    "baseUrl" : "http://localhost:9003",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "alwaysDisplayInConsole" : false,
+    "clientAuthenticatorType" : "client-secret",
+    "redirectUris" : [ "http://localhost:9003/*" ],
+    "webOrigins" : [ "http://localhost:9003" ],
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "consentRequired" : false,
+    "standardFlowEnabled" : true,
+    "implicitFlowEnabled" : false,
+    "directAccessGrantsEnabled" : false,
+    "serviceAccountsEnabled" : false,
+    "publicClient" : true,
+    "frontchannelLogout" : true,
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "oidc.ciba.grant.enabled" : "false",
+      "post.logout.redirect.uris" : "http://localhost:9003/*",
+      "display.on.consent.screen" : "false",
+      "pkce.code.challenge.method" : "S256",
+      "oauth2.device.authorization.grant.enabled" : "false",
+      "backchannel.logout.url" : "http://host.docker.internal:9003/backchannel_logout",
+      "backchannel.logout.session.required" : "true",
+      "backchannel.logout.revoke.offline.tokens" : "false"
+    },
+    "authenticationFlowBindingOverrides" : { },
+    "fullScopeAllowed" : true,
+    "nodeReRegistrationTimeout" : -1,
+    "protocolMappers" : [ {
+      "id" : "b2c3d4e5-f6a7-4890-9123-456789abcdef",
+      "name" : "roles",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usermodel-realm-role-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "multivalued" : "true",
+        "userinfo.token.claim" : "true",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "roles",
+        "jsonType.label" : "String"
+      }
+    } ],
+    "defaultClientScopes" : [ "web-origins", "acr", "profile", "roles", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "a8a8d3a2-b44c-4bd4-ab4c-d7aa63658bf7",

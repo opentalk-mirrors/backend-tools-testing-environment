@@ -15,15 +15,16 @@ Since on non Linux OSs Docker is run in a virtual machine, you cant use the `net
 
 The following web frontends are started depending on the selected profiles:
 
-* [OpenTalk Dashboard](http://localhost:3000) (profile: `frontend`) — see [User](#user) section for credentials
-* [Jaeger UI](http://localhost:16686) (profile: `metrics`) — no login required
-* [Grafana](http://localhost:9000) (profile: `metrics`) — `admin:admin`
-* [Keycloak Admin Console](http://localhost:8080/auth) — `admin:admin`
-* [RabbitMQ Management](http://localhost:8280) — `guest:guest`
-* [MinIO Console](http://localhost:9556) — `minioadmin:minioadmin`
-* [NextCloud](http://localhost:9002) (profile: `sharedfolder`) — `exampleuser:v3rys3cr3t`
-* [Email Dashboard](http://localhost:1080) (profile: `mailer`) — no login required
-* [RedisInsight](http://localhost:5540) (profile: `extras`) — no login required
+- [OpenTalk Dashboard](http://localhost:3000) (profile: `frontend`) — see [User](#user) section for credentials
+- [Jaeger UI](http://localhost:16686) (profile: `metrics`) — no login required
+- [Grafana](http://localhost:9000) (profile: `metrics`) — `admin:admin`
+- [Keycloak Admin Console](http://localhost:8080/auth) — `admin:admin`
+- [RabbitMQ Management](http://localhost:8280) — `guest:guest`
+- [MinIO Console](http://localhost:9556) — `minioadmin:minioadmin`
+- [NextCloud](http://localhost:9002) (profile: `nextcloud`) — `exampleuser:v3rys3cr3t`
+- [OpenCloud](http://localhost:9003) (profile: `opencloud`) — Keycloak login (e.g. `alice`); `admin:admin` for basic-auth/API
+- [Email Dashboard](http://localhost:1080) (profile: `mailer`) — no login required
+- [RedisInsight](http://localhost:5540) (profile: `extras`) — no login required
 
 ## Profiles
 
@@ -45,8 +46,10 @@ The following web frontends are started depending on the selected profiles:
   - recorder
 - roomserver
   - roomserver
-- sharedfolder
+- nextcloud
   - nextcloud
+- opencloud
+  - opencloud
 - spacedeck
   - spacedeck
 - etherpad
@@ -69,14 +72,14 @@ The following web frontends are started depending on the selected profiles:
 
 There are multiple users created by default.
 
-| First name | Last name | Login   | Email               | Password   |
-| ---------- | --------- | ------- | ------------------- | ---------- |
-| first      | last      | test    | foo@example.com     | `testtest` |
-| Alice      | Adams     | alice   | alice@example.com   | `alice`    |
-| Bob        | Burton    | bob     | bob@example.com     | `bob`      |
-| Charlie    | Cooper    | charlie | charlie@example.com | `charlie`  |
-| Dave       | Dunn      | dave    | dave@example.com    | `dave`     |
-| Erin       | Eaton     | erin    | erin@example.com    | `erin`     |
+| First name | Last name | Login   | Email                 | Password   |
+| ---------- | --------- | ------- | --------------------- | ---------- |
+| first      | last      | test    | `foo@example.com`     | `testtest` |
+| Alice      | Adams     | alice   | `alice@example.com`   | `alice`    |
+| Bob        | Burton    | bob     | `bob@example.com`     | `bob`      |
+| Charlie    | Cooper    | charlie | `charlie@example.com` | `charlie`  |
+| Dave       | Dunn      | dave    | `dave@example.com`    | `dave`     |
+| Erin       | Eaton     | erin    | `erin@example.com`    | `erin`     |
 
 ## Controller
 
@@ -173,7 +176,35 @@ the nextcloud is stored.
 Run nextcloud container with:
 
 ```shell
-docker compose --profile sharedfolder up
+docker compose --profile nextcloud up
+```
+
+## OpenCloud
+
+OpenCloud is an alternative to Nextcloud for the shared folder integration. It starts a single OpenCloud container that
+uses host networking and is available on the host on port 9003 via HTTP (`http://localhost:9003`).
+
+Authentication is handled by the testing-environment Keycloak (`OPENTALK` realm) instead of OpenCloud's built-in IDP:
+
+- The bundled IDP is disabled (`OC_EXCLUDE_RUN_SERVICES=idp`) and OpenCloud is registered as the public `OpenCloud`
+  client in the realm.
+- Log in with any `OPENTALK` realm user (e.g. `alice`). On first login the account is auto-provisioned in OpenCloud's
+  built-in LDAP (IDM) and gets the default `user` role.
+- The built-in `admin:admin` account is kept for API/WebDAV access via basic auth.
+
+Keycloak imports the realm only when it is first created, so the new `OpenCloud` client is picked up only after a realm
+(re-)import. For an existing environment, either recreate the Keycloak database (drop the `keycloak` database in Postgres
+or wipe its `pg_data*` volume) or add the client manually in the
+[Keycloak admin console](http://localhost:8080/auth): a public `openid-connect` client `OpenCloud`, redirect URI
+`http://localhost:9003/*`, web origin `http://localhost:9003`, PKCE method `S256`.
+
+The container creates an `opencloud` folder in which the configuration and data are stored. After switching the auth
+model you may need to delete that folder to start from a clean state.
+
+Run opencloud container with:
+
+```shell
+docker compose --profile opencloud up
 ```
 
 ## Mailer
