@@ -216,4 +216,3 @@ Run mailer profile with:
 ```shell
 docker compose --profile mailer up
 ```
-
