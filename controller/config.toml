@@ -186,7 +186,7 @@ recording_task_queue = "opentalk_recorder"
 # `rooms/roomserver/<room-id>/start_invited`) have to be used instead.
 #
 # The deployed frontend client has to be compatible with the roomservers signaling implementation.
-# 
+#
 # Whether the roomserver is running embedded in the controller process (internal) or as an external service.
 kind = "external"
 # The URL the controller uses for requests to the roomserver.
@@ -223,6 +223,7 @@ base_url = "http://localhost:9001"
 [roomserver.modules.moderation]
 [roomserver.modules.polls]
 [roomserver.modules.raise_hands]
+[roomserver.modules.reaction]
 [roomserver.modules.shared_folder]
 [roomserver.modules.subroom_audio]
 [roomserver.modules.timer]
