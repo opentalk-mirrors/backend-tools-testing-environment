@@ -1,0 +1,1 @@
+We keep this directory, so that docker does not create it with root permission.

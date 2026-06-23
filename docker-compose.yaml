@@ -16,7 +16,7 @@ services:
     ports:
       - 127.0.0.1:5432:5432
     volumes:
-      - ./pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data:Z
+      - ./${DATA_DIR:-data}/pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data:Z
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     command:
       - postgres
@@ -88,7 +88,7 @@ services:
   minio:
     image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
     volumes:
-      - ./${DATA_DIR:-.data}/minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data:Z
+      - ./${DATA_DIR:-data}/minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data:Z
     entrypoint: ''
     command: >
       sh -c '
@@ -352,7 +352,7 @@ services:
     profiles:
       - nextcloud
     volumes:
-      - ./nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html:Z
+      - ./${DATA_DIR:-data}/nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html:Z
     environment:
       - SQLITE_DATABASE=nextcloud
       - NEXTCLOUD_ADMIN_USER=exampleuser
@@ -416,8 +416,8 @@ services:
       # Allow the browser to reach the Keycloak origin during the login flow.
       - PROXY_CSP_CONFIG_FILE_LOCATION=/etc/opencloud/csp.yaml
     volumes:
-      - ./${DATA_DIR:-.data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/config:/etc/opencloud:Z
-      - ./${DATA_DIR:-.data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/data:/var/lib/opencloud:Z
+      - ./${DATA_DIR:-data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/config:/etc/opencloud:Z
+      - ./${DATA_DIR:-data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/data:/var/lib/opencloud:Z
       - ./opencloud/csp.yaml:/etc/opencloud/csp.yaml:ro,Z
       - ./opencloud/proxy.yaml:/etc/opencloud/proxy.yaml:ro,Z
 
