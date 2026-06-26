@@ -698,6 +698,17 @@
         "claim.name": "tariff_id",
         "jsonType.label": "String"
       }
+    }, {
+      "name": "controller-audience",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "consentRequired": false,
+      "config": {
+        "included.client.audience": "Controller",
+        "access.token.claim": "true",
+        "id.token.claim": "false",
+        "introspection.token.claim": "true"
+      }
     } ],
     "defaultClientScopes" : [ "web-origins", "acr", "Groups", "profile", "roles", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
@@ -771,6 +782,17 @@
         "access.token.claim" : "true",
         "claim.name" : "clientHost",
         "jsonType.label" : "String"
+      }
+    }, {
+      "name": "controller-audience",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "consentRequired": false,
+      "config": {
+        "included.client.audience": "Controller",
+        "access.token.claim": "true",
+        "id.token.claim": "false",
+        "introspection.token.claim": "true"
       }
     } ],
     "defaultClientScopes" : [ "web-origins", "acr", "Groups", "profile", "roles", "email" ],
@@ -1021,6 +1043,18 @@
       "basic",
       "email"
     ],
+    "protocolMappers": [ {
+      "name": "controller-audience",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-audience-mapper",
+      "consentRequired": false,
+      "config": {
+        "included.client.audience": "Controller",
+        "access.token.claim": "true",
+        "id.token.claim": "false",
+        "introspection.token.claim": "true"
+      }
+    } ],
     "optionalClientScopes": [
       "address",
       "phone",
