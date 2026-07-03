@@ -4,7 +4,7 @@
 # (unlike controller which uses network_mode: host and connects via localhost)
 url = "amqp://guest:guest@rabbitmq:5672/%2F"
 # The queue to subscribe to
-mail_task_queue = "opentalk_mailer"
+queue_name = "opentalk_mailer"
 
 [smtp]
 # SMTP Cleartext: smtp://user:pass@mailserver.example.org:1234?disable_starttls=true
