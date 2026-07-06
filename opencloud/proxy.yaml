@@ -1,0 +1,17 @@
+---
+# OpenCloud proxy role assignment.
+#
+# Access to OpenCloud is gated by Keycloak realm roles delivered in the "roles"
+# OIDC claim (emitted by a protocol mapper on the OpenCloud client in the
+# OPENTALK realm). Only claim values listed below are mapped to an OpenCloud
+# role; users without a matching role get no role assigned and are denied
+# access.
+role_assignment:
+  driver: oidc
+  oidc_role_mapper:
+    role_claim: roles
+    role_mapping:
+      - role_name: admin
+        claim_value: opencloudAdmin
+      - role_name: user
+        claim_value: OpenCloud

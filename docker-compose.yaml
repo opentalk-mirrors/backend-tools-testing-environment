@@ -1,4 +1,7 @@
 ---
+include:
+  - ./controller/shared-folder-opencloud.compose.yml
+
 volumes:
   rabbitmq-prometheus_prometheus: null
   rabbitmq-prometheus_grafana: null
@@ -13,7 +16,7 @@ services:
     ports:
       - 127.0.0.1:5432:5432
     volumes:
-      - ./pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data:Z
+      - ./${DATA_DIR:-data}/pg_data${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/lib/postgresql/data:Z
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     command:
       - postgres
@@ -85,7 +88,7 @@ services:
   minio:
     image: registry.heinlein.group/opentalk/minio:RELEASE.2025-10-15T17-29-55Z
     volumes:
-      - ./minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data:Z
+      - ./${DATA_DIR:-data}/minio${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/storage:/data:Z
     entrypoint: ''
     command: >
       sh -c '
@@ -107,11 +110,6 @@ services:
       - ./controller/config.toml:/controller/config.toml:Z
     environment:
       - RUST_LOG=debug,rustls=info,tokio_tungstenite=info,tungstenite=info
-      # - OPENTALK_CTRL__LOGGING__OTLP_TRACING_ENDPOINT="http://localhost:4317" # enables tracing (see jaeger)
-      # - OPENTALK_CTRL__KEYCLOAK__BASE_URL=http://central-testing-keycloak:8080/auth
-      # - OPENTALK_CTRL__KEYCLOAK__REALM=opentalk
-      # - OPENTALK_CTRL__ETHERPAD__URL=http://etherpad/
-      # - OPENTALK_CTRL__ETHERPAD__API_KEY=secret
     network_mode: host
     depends_on:
       postgres:
@@ -352,15 +350,76 @@ services:
   nextcloud:
     image: docker.io/library/nextcloud:apache
     profiles:
-      - sharedfolder
+      - nextcloud
     volumes:
-      - ./nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html:Z
+      - ./${DATA_DIR:-data}/nextcloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}:/var/www/html:Z
     environment:
       - SQLITE_DATABASE=nextcloud
       - NEXTCLOUD_ADMIN_USER=exampleuser
       - NEXTCLOUD_ADMIN_PASSWORD=v3rys3cr3t
     ports:
       - 127.0.0.1:9002:80
+
+  opencloud:
+    image: opencloudeu/opencloud-rolling:latest
+    profiles:
+      - opencloud
+    user: 0:0
+    # Use host networking like the other OpenTalk services so the container
+    # reaches Keycloak at the same URL the browser uses (http://localhost:8080).
+    # Keycloak is published on 127.0.0.1:8080 only, so it is reachable from the
+    # container exclusively via the shared host loopback, and the OIDC issuer is
+    # then identical inside and outside the container (required for validation).
+    network_mode: host
+    entrypoint: ''
+    # run opencloud init to create a config file with random secrets on first
+    # start; it fails on subsequent runs because the config already exists, so
+    # we ignore that error and then start the server
+    command: >
+      sh -c '
+      opencloud init --insecure true || true;
+      opencloud server
+      '
+    environment:
+      # OpenCloud serves plain HTTP on the host loopback. The bundled IDP is
+      # disabled (see OC_EXCLUDE_RUN_SERVICES) so the https-only issuer
+      # requirement no longer applies, and HTTP keeps the scheme identical to
+      # Keycloak, avoiding browser mixed-content errors during login.
+      - OC_URL=http://localhost:9003
+      - OC_INSECURE=true
+      - PROXY_TLS=false
+      - PROXY_HTTP_ADDR=127.0.0.1:9003
+      - PROXY_ENABLE_BASIC_AUTH=true
+      - IDM_ADMIN_PASSWORD=admin
+      - IDM_CREATE_DEMO_USERS=true
+      # --- Authenticate against the testing-environment Keycloak (OPENTALK) ---
+      # Disable only the bundled IDP; keep the bundled IDM (LDAP) user store so
+      # the local admin (admin:admin) keeps working for basic-auth/API access.
+      - OC_EXCLUDE_RUN_SERVICES=idp
+      - OC_OIDC_ISSUER=http://localhost:8080/auth/realms/OPENTALK
+      - WEB_OIDC_CLIENT_ID=OpenCloud
+      - PROXY_OIDC_REWRITE_WELLKNOWN=true
+      # Match Keycloak users by preferred_username and create a matching local
+      # account on first login (autoprovisioning). Access is gated by the
+      # "OpenCloud" realm role: the proxy reads the "roles" OIDC claim and maps
+      # it to OpenCloud roles via /etc/opencloud/proxy.yaml. Users without a
+      # matching role get no OpenCloud role assigned and are denied access.
+      - PROXY_AUTOPROVISION_ACCOUNTS=true
+      - PROXY_ROLE_ASSIGNMENT_DRIVER=oidc
+      - PROXY_ROLE_ASSIGNMENT_OIDC_CLAIM=roles
+      - GRAPH_ASSIGN_DEFAULT_USER_ROLE=false
+      - PROXY_USER_OIDC_CLAIM=preferred_username
+      - PROXY_USER_CS3_CLAIM=username
+      - PROXY_AUTOPROVISION_CLAIM_USERNAME=preferred_username
+      - PROXY_AUTOPROVISION_CLAIM_EMAIL=email
+      - PROXY_AUTOPROVISION_CLAIM_DISPLAYNAME=name
+      # Allow the browser to reach the Keycloak origin during the login flow.
+      - PROXY_CSP_CONFIG_FILE_LOCATION=/etc/opencloud/csp.yaml
+    volumes:
+      - ./${DATA_DIR:-data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/config:/etc/opencloud:Z
+      - ./${DATA_DIR:-data}/opencloud${COMPOSE_PROJECT_NAME:+_$COMPOSE_PROJECT_NAME}/data:/var/lib/opencloud:Z
+      - ./opencloud/csp.yaml:/etc/opencloud/csp.yaml:ro,Z
+      - ./opencloud/proxy.yaml:/etc/opencloud/proxy.yaml:ro,Z
 
   keycloak:
     image: registry.heinlein.group/opentalk/keycloak:26.4
