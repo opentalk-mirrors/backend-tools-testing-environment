@@ -36,16 +36,11 @@ The following web frontends are started depending on the selected profiles:
     - minio
 - frontend
     - web-app
-- frontend-roomserver
-    - web-app (roomserver version)
 - backend
     - controller
-- backend-roomserver
-    - controller-roomserver (controller with roomserver enables)
+    - roomserver
 - recorder
     - recorder
-- roomserver
-    - roomserver
 - nextcloud
     - nextcloud
 - opencloud
@@ -67,6 +62,11 @@ The following web frontends are started depending on the selected profiles:
     - redis
     - redisinsight
     - ndt
+- controller-lb
+    - controller-lb-1
+    - controller-lb-2
+    - redis
+    - nginx
 
 ## User
 
