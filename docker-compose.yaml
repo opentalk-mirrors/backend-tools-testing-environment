@@ -31,7 +31,7 @@ services:
       retries: 3
 
   livekit:
-    image: registry.heinlein.group/opentalk/livekit-server:1.9
+    image: registry.heinlein.group/opentalk/livekit-server:v1.13
     network_mode: host
     restart: always
     command: --config /livekit.yaml --dev
