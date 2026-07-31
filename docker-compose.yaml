@@ -2,6 +2,11 @@
 include:
   - ./controller/shared-folder-opencloud.compose.yml
 
+networks:
+  default:
+    driver_opts:
+      com.docker.network.bridge.name: br-opentalk-env
+
 volumes:
   rabbitmq-prometheus_prometheus: null
   rabbitmq-prometheus_grafana: null
