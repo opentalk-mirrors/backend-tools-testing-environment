@@ -422,7 +422,7 @@ services:
       - ./opencloud/proxy.yaml:/etc/opencloud/proxy.yaml:ro,Z
 
   keycloak:
-    image: registry.heinlein.group/opentalk/keycloak:26.4
+    image: registry.heinlein.group/opentalk/keycloak:v26.7
     restart: always
     command:
       - start-dev
